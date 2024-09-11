@@ -50,7 +50,8 @@ class XdwList:
         self.b.extend([0] * (64 - len(now_enc)))
 
         # comment
-        comment_name = 'python generated'.encode()
+        #comment_name = 'python generated'.encode()
+        comment_name = input("Please enter comments: ").encode()
         self.b.extend(comment_name)
         self.b.extend([0] * (256 - len(comment_name)))
 
@@ -229,6 +230,7 @@ if __name__ == "__main__":
 
 
     arb_files = ['pulse1.wv', 'pulse2.wv']
+    has_EOF = 0
     file_playback = XdwFilePlayback('IQ_expert')
     #with open('PDWlist.csv', newline='') as csvfile:
     with open(pdw_list, newline='') as csvfile:
@@ -320,6 +322,12 @@ if __name__ == "__main__":
                     cdw = ctrl_xdw.TcdwExpert(toa=20e-3  - (1 / 2.4e9),
                                               cmd=ctrl_xdw.CtrlXdwCmd.EOF)
                     file_playback.append_entry(cdw)
+                    has_EOF = 1
 
+    if has_EOF == 0:  #if no EOF at the end of the PDW list, append one.
+        print(f"Appending EOF TCDW")
+        cdw = ctrl_xdw.TcdwExpert(toa=20e-3 - (1 / 2.4e9),
+                                  cmd=ctrl_xdw.CtrlXdwCmd.EOF)
+        file_playback.append_entry(cdw)
     file_playback.generate_files()
     print(f'--------Successfully generated files-----------')
