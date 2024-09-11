@@ -236,14 +236,14 @@ if __name__ == "__main__":
         header = next(csvreader)
         for row in csvreader:
             if row[index_containing_substring(header, 'Type')] == 'pdw':
-                print(f'Processing {row[index_containing_substring(header, 'Type')]} with {row[index_containing_substring(header, 'Mod')]} waveform with {row[index_containing_substring(header, 'Number of Pulses')]} pulse(s) at TOA: {row[index_containing_substring(header, 'TOA')]} s')
+                print(f"Processing {row[index_containing_substring(header, 'Type')]} with {row[index_containing_substring(header, 'Mod')]} waveform with {row[index_containing_substring(header, 'Number of Pulses')]} pulse(s).")
                 if int(row[index_containing_substring(header, 'Number of Pulses')]) == 0:
                     continue
                 if row[index_containing_substring(header, 'Mod')] == 'arb':
                     pdw = pdw_expert.PdwExpert(toa=float(row[index_containing_substring(header,'TOA')]),
                                                payload=xdw_payload.XdwPayloadSegmentArb(segment_idx=0),
                                                extension3=xdw_extension.XdwExtensionBurst(pri=float(row[index_containing_substring(header, 'Burst PRI')]),
-                                                                                          add_pulses=float(row[index_containing_substring(header, 'Number of Pulses')]) - 1),
+                                                                                          add_pulses=int(row[index_containing_substring(header, 'Number of Pulses')]) - 1),
                                                m1=float(row[index_containing_substring(header, 'Marker 1')]),
                                                m2=float(row[index_containing_substring(header, 'Marker 2')]),
                                                m3=float(row[index_containing_substring(header, 'Marker 3')]))
@@ -252,7 +252,7 @@ if __name__ == "__main__":
                     pdw = pdw_expert.PdwExpert(toa=float(row[index_containing_substring(header, 'TOA')]),
                                                payload=xdw_payload.PdwPayloadRtUnmod(t_on=float(row[index_containing_substring(header,'Pulse Width')])),
                                                extension3=xdw_extension.XdwExtensionBurst(pri=float(row[index_containing_substring(header, 'Burst PRI')]),
-                                                                                          add_pulses=float(row[index_containing_substring(header, 'Number of Pulses')]) - 1),
+                                                                                          add_pulses=int(row[index_containing_substring(header, 'Number of Pulses')]) - 1),
                                                freq_offset=float(row[index_containing_substring(header,'Frequency Offset')]),
                                                level_offset=float(row[index_containing_substring(header,'Level Offset')]),
                                                phase_offset=float(row[index_containing_substring(header,'Phase Offset')]),
@@ -265,7 +265,7 @@ if __name__ == "__main__":
                                                payload=xdw_payload.PdwPayloadRtChirpLinear(t_on=float(row[index_containing_substring(header,'Pulse Width')]),
                                                                                            freq_step=float(row[index_containing_substring(header,'Freq Step')])),
                                                extension3=xdw_extension.XdwExtensionBurst(pri=float(row[index_containing_substring(header, 'Burst PRI')]),
-                                                                                          add_pulses=float(row[index_containing_substring(header, 'Number of Pulses')]) - 1),
+                                                                                          add_pulses=int(row[index_containing_substring(header, 'Number of Pulses')]) - 1),
                                                freq_offset=float(row[index_containing_substring(header,'Frequency Offset')]),
                                                level_offset=float(row[index_containing_substring(header,'Level Offset')]),
                                                phase_offset=float(row[index_containing_substring(header,'Phase Offset')]),
@@ -278,7 +278,7 @@ if __name__ == "__main__":
                                                payload=xdw_payload.PdwPayloadRtChirpTriangular(t_on=float(row[index_containing_substring(header,'Pulse Width')]),
                                                                                                freq_step=float(row[index_containing_substring(header,'Freq Step')])),
                                                extension3=xdw_extension.XdwExtensionBurst(pri=float(row[index_containing_substring(header, 'Burst PRI')]),
-                                                                                          add_pulses=float(row[index_containing_substring(header, 'Number of Pulses')]) - 1),
+                                                                                          add_pulses=int(row[index_containing_substring(header, 'Number of Pulses')]) - 1),
                                                freq_offset=int(row[index_containing_substring(header,'Frequency Offset')]),
                                                level_offset=int(row[index_containing_substring(header,'Level Offset')]),
                                                phase_offset=float(row[index_containing_substring(header,'Phase Offset')]),
@@ -292,7 +292,7 @@ if __name__ == "__main__":
                                                                                       code=int(row[index_containing_substring(header,'Bkr Code')]),
                                                                                       stuff=int(row[index_containing_substring(header,'Stuff')])),
                                                extension3=xdw_extension.XdwExtensionBurst(pri=float(row[index_containing_substring(header, 'Burst PRI')]),
-                                                                                          add_pulses=float(row[index_containing_substring(header, 'Number of Pulses')]) - 1),
+                                                                                          add_pulses=int(row[index_containing_substring(header, 'Number of Pulses')]) - 1),
                                                freq_offset=int(row[index_containing_substring(header,'Frequency Offset')]),
                                                level_offset=int(row[index_containing_substring(header,'Level Offset')]),
                                                phase_offset=float(row[index_containing_substring(header,'Phase Offset')]),
@@ -302,21 +302,21 @@ if __name__ == "__main__":
                     file_playback.append_entry(pdw)
             if row[index_containing_substring(header, 'Type')] == "tcdw":
                 if row[index_containing_substring(header, 'RF')] == "rffreq":
-                    print(f'Processing {row[index_containing_substring(header, 'Type')]} to set frequency to {row[index_containing_substring(header, 'RF Freq')]} Hz')
+                    print(f"Processing {row[index_containing_substring(header, 'Type')]} to set frequency to {row[index_containing_substring(header, 'RF Freq')]} Hz")
                     cdw = ctrl_xdw.TcdwExpert(toa=float(row[index_containing_substring(header, 'TOA')]),
                                               path=0,
                                               fval=float(row[index_containing_substring(header, 'RF Freq')]),
                                               cmd=ctrl_xdw.CtrlXdwCmd.FREQ)
                     file_playback.append_entry(cdw)
                 if row[index_containing_substring(header, 'RF')] == "rflevel":
-                    print(f'Processing {row[index_containing_substring(header, 'Type')]} to change level to {row[index_containing_substring(header, 'Level')]} dBm')
+                    print(f"Processing {row[index_containing_substring(header, 'Type')]} to change level to {row[index_containing_substring(header, 'Level')]} dBm")
                     cdw = ctrl_xdw.TcdwExpert(toa=float(row[index_containing_substring(header, 'TOA')]),
                                               path=0,
                                               lval=float(row[index_containing_substring(header, 'Level')]),
                                               cmd=ctrl_xdw.CtrlXdwCmd.AMPL)
                     file_playback.append_entry(cdw)
                 if row[index_containing_substring(header, 'Mod')] == "EOF":
-                    print(f'Processing {row[index_containing_substring(header, 'Type')]} for {row[index_containing_substring(header, 'Mod')]}')
+                    print(f"Processing {row[index_containing_substring(header, 'Type')]} for {row[index_containing_substring(header, 'Mod')]}")
                     cdw = ctrl_xdw.TcdwExpert(toa=20e-3  - (1 / 2.4e9),
                                               cmd=ctrl_xdw.CtrlXdwCmd.EOF)
                     file_playback.append_entry(cdw)
