@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.rsxdwstreaming.xdw_extension &mdash; rsxdwstreaming 2.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> rsxdwstreaming
+          </a>
+              <div class="version">
+                2.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../revision_history.html">Revision History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rs_descriptor_words.html">Rohde &amp; Schwarz Descriptor Words (xDW)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">rsxdwstreaming</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>src.rsxdwstreaming.xdw_extension</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.rsxdwstreaming.xdw_extension</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">bitstring</span>
+
+<span class="c1"># pylint: disable=too-few-public-methods</span>
+
+
+<div class="viewcode-block" id="PdwParamsStuffing"><a class="viewcode-back" href="../../../xdw_extension.html#src.rsxdwstreaming.xdw_extension.PdwParamsStuffing">[docs]</a><span class="k">class</span> <span class="nc">PdwParamsStuffing</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class for stuffing PDW params</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param</span> <span class="o">=</span> <span class="n">bitstring</span><span class="o">.</span><span class="n">BitArray</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PdwParamsEdge"><a class="viewcode-back" href="../../../xdw_extension.html#src.rsxdwstreaming.xdw_extension.PdwParamsEdge">[docs]</a><span class="k">class</span> <span class="nc">PdwParamsEdge</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class for basic edge shaping PDW params</span>
+
+<span class="sd">    :param edge_type: Define edge type, 0 = linear, 1 = raised cosine</span>
+<span class="sd">    :type edge_type: int</span>
+<span class="sd">    :param multiplier: multiplication factor for rise_fall_time, 0 = x1, 1 = x8</span>
+<span class="sd">    :type multiplier: int</span>
+<span class="sd">    :param rise_fall_time: common rise and fall time in seconds</span>
+<span class="sd">    :type rise_fall_time: float</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_type</span><span class="p">,</span> <span class="n">multiplier</span><span class="p">,</span> <span class="n">rise_fall_time</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param</span> <span class="o">=</span> <span class="n">bitstring</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;uint:3, uint:1, uint:6, uint:22&#39;</span><span class="p">,</span> <span class="n">edge_type</span><span class="p">,</span> <span class="n">multiplier</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+                                    <span class="n">rise_fall_time</span> <span class="o">*</span> <span class="mf">2.4e9</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="XdwExtensionUnused"><a class="viewcode-back" href="../../../xdw_extension.html#src.rsxdwstreaming.xdw_extension.XdwExtensionUnused">[docs]</a><span class="k">class</span> <span class="nc">XdwExtensionUnused</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class for unused PDW extensions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extension</span> <span class="o">=</span> <span class="n">bitstring</span><span class="o">.</span><span class="n">BitArray</span><span class="p">(</span><span class="mi">48</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="XdwExtensionEdge"><a class="viewcode-back" href="../../../xdw_extension.html#src.rsxdwstreaming.xdw_extension.XdwExtensionEdge">[docs]</a><span class="k">class</span> <span class="nc">XdwExtensionEdge</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class for edge shaping PDW extension</span>
+
+<span class="sd">    :param edge_type: Define edge type, 0 = linear, 1 = raised cosine</span>
+<span class="sd">    :type edge_type: int</span>
+<span class="sd">    :param multiplier: multiplication factor for rise_fall_time, 0 = x1, 1 = x8</span>
+<span class="sd">    :type multiplier: int</span>
+<span class="sd">    :param rise_time: rise time in seconds</span>
+<span class="sd">    :type rise_time: float</span>
+<span class="sd">    :param fall_time: fall time in seconds</span>
+<span class="sd">    :type fall_time: float</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_type</span><span class="p">,</span> <span class="n">multiplier</span><span class="p">,</span> <span class="n">rise_time</span><span class="p">,</span> <span class="n">fall_time</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extension</span> <span class="o">=</span> <span class="n">bitstring</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;uint:3, uint:1, uint:22, uint:22&#39;</span><span class="p">,</span> <span class="n">edge_type</span><span class="p">,</span> <span class="n">multiplier</span><span class="p">,</span>
+                                        <span class="n">rise_time</span> <span class="o">*</span> <span class="mf">2.4e9</span><span class="p">,</span> <span class="n">fall_time</span> <span class="o">*</span> <span class="mf">2.4e9</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="XdwExtensionBurst"><a class="viewcode-back" href="../../../xdw_extension.html#src.rsxdwstreaming.xdw_extension.XdwExtensionBurst">[docs]</a><span class="k">class</span> <span class="nc">XdwExtensionBurst</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class for burst PDW extension</span>
+
+<span class="sd">    :param pri: pulse repetition interval in seconds</span>
+<span class="sd">    :type pri: float</span>
+<span class="sd">    :param add_pulses: additional pulses</span>
+<span class="sd">    :type add_pulses: int</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pri</span><span class="p">,</span> <span class="n">add_pulses</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extension</span> <span class="o">=</span> <span class="n">bitstring</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;uint:32, uint:16&#39;</span><span class="p">,</span> <span class="n">pri</span> <span class="o">*</span> <span class="mf">2.4e9</span><span class="p">,</span> <span class="n">add_pulses</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright © Rohde &amp; Schwarz 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

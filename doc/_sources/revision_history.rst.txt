@@ -1,0 +1,14 @@
+Revision History
+================
+.. include:: <isonum.txt>
+Rohde & Schwarz rsxdwstreaming package.
+
+Supported instruments: SMW200A
+
+___________
+
+Release notes:
+
+Version 1.0.0
+
+- First released version

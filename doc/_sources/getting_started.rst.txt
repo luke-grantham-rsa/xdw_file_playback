@@ -1,0 +1,311 @@
+.. include:: <isonum.txt>
+
+Getting Started
+===============
+
+1. Introduction
+_______________
+
+rsxdwstreaming is a Python module to generate Rohde & Schwarz descriptor words and send them to the Advanced Data /
+Control or HS DIGIQ interface in the R&S®SMW200A.
+
+This guide shall help to
+
+- Establish a TCP or UDP connection to the SMW200A Advanced Data / Control interface
+- Generate descriptor words, like pulse descriptor words (PDW), (timed) control descriptor words (TCDW/CDW) or ARB descriptor words (ADW)
+- Comfortably use descriptor word extensions
+- Send the descriptor words via the TCP or UDP connection
+
+
+Check out rsxdwstreaming full examples here: `rsxdwstreaming Examples <examples.html>`_.
+
+Interface Control Documents:
+
+- `PDW/TCDW streaming <www.rohde-schwarz.com/appnote/1GP133>`_ (SMW-K503/-K504)
+- `ADW/CDW streaming <www.rohde-schwarz.com/appnote/1GP134>`_ (SMW-K506)
+
+2. Installation
+_______________
+
+rsxdwstreaming is distributed as wheel file. You can install it with pip (for example, ``pip.exe`` for Windows)
+
+- Save the rsxdwstreaming package on your computer, for example in ``c:\temp\``
+- Start the command line ``WinKey + R``, type ``cmd`` and hit ENTER
+- Change the working directory to the Python installation of your choice (adjust the user name and python version in the path):
+
+    ``cd c:\Users\John\AppData\Local\Programs\Python\Python37\Scripts``
+
+- Install with the command: ``pip install c:\temp\rsxdwstreaming_v1.0.0.tar``
+
+.. _config_smw:
+
+3. Configure the SMW200A for xDW streaming
+__________________________________________
+
+The first step towards streaming xDWs is to configure the SMW200A.
+
+.. rubric:: Cabling
+
+- Power up the SMW200A
+- Connect the LAN interface of the SMW200A to your network
+- Connect the interface labeled ``ADV DATA / CTRL 1`` to your network for PDW/TCDW streaming
+- Connect the interface labeled ``HS DIGIQ`` to your network for ADW/CDW streaming
+
+.. rubric:: GUI
+
+- Select ``Baseband->Misc->Extended Sequencer``
+
+For PDW and TCDW streaming
+
+- Select ``Mode->Real Time Control Interface``
+- Select ``Local ADV DATA/CTRL Network Settings"`` to configure the IP address, port number and protocol of the ``ADV DATA / CTRL 1`` interface
+
+For ADW and TDW streaming
+
+- Select ``Mode->Agile Sequencing``
+- Select ``Local QSFP Network Settings`` to configure the IP address, port number and protocol of the ``HS DIGIQ IN/OUT 1`` interface
+
+More information on the configuration is available in the
+`R&S®SMW200A Extended and Real Time Sequencing User Manual <https://www.rohde-schwarz.com/us/manual/r-s-smw-k501-k502-k503-k504-k315-extended-and-real-time-sequencing-user-manual-manuals-gb1_78701-249480.html>`_
+
+4. Connecting to the streaming interface
+________________________________________
+
+.. code-block:: python
+
+    """"
+    Connect to the streaming interface
+    """
+
+    from rsxdwstreaming import xdw_streaming
+
+    # Use the IP address, port number and protocol configured for the streaming interface in the XdwStreaming constructor
+
+    # TCP connection with default network port = 49152
+    xdw_interface = xdw_streaming.XdwStreaming('127.0.0.1')
+
+    # UDP connection with default network port = 49152
+    xdw_interface = xdw_streaming.XdwStreaming('127.0.0.1', 49152, 'UDP')
+
+
+In time critical applications it might be necessary to send the PDWs/TCDWs as soon as they are available/computed. In that case,
+you can set the option ``TCP_NODElAY`` in the constructor.
+
+.. code-block:: python
+
+    """"
+    Connect to the streaming interface
+    """
+
+    from rsxdwstreaming import xdw_streaming
+    from socket import socket
+
+    # TCP connection with default network port = 49152 and disabled Nagle's algorithm, by setting TCP_NODELAY
+    xdw_interface = xdw_streaming.XdwStreaming('127.0.0.1', 49152, 'TCP', (socket.IPPROTO_TCP, socket.TCP_NODELAY, 1))
+
+5. Generate basic and expert PDWs
+_________________________________
+
+Each pulse descriptor word consists of header, flags, body and payload.
+
+The header and flags section of each PDW contain information about the timing and the content (structure) of
+the PDW. Using the rsxdwstreaming package, it is sufficient to provide the timing and and information about marker signals.
+
+Information about the RF characteristics of the desired signal are given in the body section
+
+The payload section either addresses a pre-calculated ARB segment or contains information to generate a pulsed
+signal in real-time
+
+.. code-block:: python
+
+    """"
+    Generate basic PDWs
+    """
+    from rsxdwstreaming import pdw_basic, xdw_payload
+
+    # PDW to play pre-calculated ARB segment with index #0 at time 0s
+    pdw_arb = pdw_basic.PdwBasic(toa=0, payload=xdw_payload.XdwPayloadSegmentArb(segment_idx=0))
+
+    # PDW to play real-time pulse with pulse duration of 10 µs at time 5s, Marker 1 is high
+    pdw_unmod = pdw_basic.PdwBasic(toa=5, payload=xdw_payload.PdwPayloadRtUnmod(t_on=10e-6), m1=1)
+
+    # PDW to play real-time pulse with pulse duration of 10 µs at time 5s a level offset (attenuation) of 3dB  and a frequency offset of 100MHz
+    pdw_offsets = pdw_basic.PdwBasic(toa=5, payload=xdw_payload.PdwPayloadRtUnmod(t_on=10e-6), level_offset=-3, freq_offset=100e6)
+
+The expert pulse descriptor word format additionally can contain a parameter section or extensions. A mix of
+basic and expert format during a running simulation is not possible.
+
+.. code-block:: python
+
+    """"
+    Generate expert PDWs
+    """
+    from rsxdwstreaming import pdw_expert, xdw_payload, xdw_extension
+
+    # PDW to play real-time pulse with pulse duration of 10 µs at time 5s
+    pdw_unmod = pdw_expert.PdwExpert(toa=5, payload=xdw_payload.PdwPayloadRtUnmod(t_on=10e-6))
+
+    # PDW to play real-time pulses with linear rising/falling edges (rise/fall time: 2µs), pulse duration of 5µs at time 5s
+    pdw_param = pdw_expert.PdwExpert(toa=3, payload=xdw_payload.PdwPayloadRtUnmod(t_on=5e-6), param=xdw_extension.PdwParamsEdge(0, 0, 2e-6))
+
+    # PDW to play 5 real-time pulses with pulse duration of 10µs and PRI of 100µs at time 5s
+    pdw_burst = pdw_expert.PdwExpert(toa=5, payload=xdw_payload.PdwPayloadRtUnmod(t_on=10e-6), extension1=xdw_extension.XdwExtensionBurst(pri=100e-6, add_pulses=4))
+
+6. Generate basic and expert TCDWs
+__________________________________
+
+The content of basic and expert TCDWs is identical, but the structure differs slightly. Depending on the ``PDW Format``
+selected in the GUI of the SMW200A, either basic or expert TCDWs are used.
+
+Each timed control descriptor word consists of header, flags and body.
+
+The TCDW header section contains the TOA and flags which define the command type.
+
+The TCDW flags section contains information about the xDW type, in this case (timed) control descriptor word.
+
+The TCDW body section contains values for instrument RF frequency and level.
+
+.. code-block:: python
+
+    """"
+    Generate basic TCDWs
+    """
+    from rsxdwstreaming import ctrl_xdw
+
+    # TCDW to switch the instrument RF frequency in path A to a value of 10GHz at time 10s
+    tcdw_freq = ctrl_xdw.TcdwBasic(toa=10, path=0, cmd=ctrl_xdw.CtrlXdwCmd.FREQ, fval=10e9)
+
+    # TCDW to switch the instrument RF level in path B to a value of -20dBm at time 15s
+    tcdw_ampl = ctrl_xdw.TcdwBasic(toa=15, path=1, cmd=ctrl_xdw.CtrlXdwCmd.FREQ, lval=-20)
+
+    # TCDW to switch the instrument RF frequency and level in path A to values of 12GHz and -10dBm at time 23s
+    tcdw_freq_ampl = ctrl_xdw.TcdwBasic(toa=23, path=0, cmd=ctrl_xdw.CtrlXdwCmd.FREQ, fval=12e9, lval=-10)
+
+    # TCDW to re-arm Extended Sequencer block A at time 40s
+    tcdw_rearm = ctrl_xdw.TcdwBasic(toa=40, path=0, cmd=ctrl_xdw.CtrlXdwCmd.ARM)
+
+.. code-block:: python
+
+    """"
+    Generate expert TCDWs
+    """
+    from rsxdwstreaming import ctrl_xdw
+
+    # TCDW to switch the instrument RF frequency in path A to a value of 10GHz at time 10s
+    tcdw_freq = ctrl_xdw.TcdwExpert(toa=10, path=0, cmd=ctrl_xdw.CtrlXdwCmd.FREQ, fval=10e9)
+
+    # TCDW to switch the instrument RF level in path B to a value of -20dBm at time 15s
+    tcdw_ampl = ctrl_xdw.TcdwExpert(toa=15, path=1, cmd=ctrl_xdw.CtrlXdwCmd.FREQ, lval=-20)
+
+    # TCDW to switch the instrument RF frequency and level in path A to values of 12GHz and -10dBm at time 23s
+    tcdw_freq_ampl = ctrl_xdw.TcdwExpert(toa=23, path=0, cmd=ctrl_xdw.CtrlXdwCmd.FREQ, fval=12e9, lval=-10)
+
+    # TCDW to re-arm Extended Sequencer block A at time 40s
+    tcdw_rearm = ctrl_xdw.TcdwExpert(toa=40, path=0, cmd=ctrl_xdw.CtrlXdwCmd.ARM)
+
+7. Generate ADWs
+________________
+Each ARB descriptor word consists of header, flags, body and payload.
+
+The ADW header section contains flags which define the content of the ADW.
+
+In the ADW flags section, you can configure,
+if an ARB segment can be interrupted by a subsequent ADW or not and it contains information about the marker signals.
+
+Information about the RF characteristics of the desired signal are given in the body section
+
+The payload section contains the segment index of a pre-calculated ARB segment.
+If configured in the header, the ADW extension can be used to generate multiple repetitions
+
+.. code-block:: python
+
+    """"
+    Generate ADWs
+    """
+    from rsxdwstreaming import adw, xdw_payload, xdw_extension
+
+    #ADW to play pre-calculated ARB segment with index #13 with a frequency offset of -100MHz The segment can not be interrupted
+    adw = adw.Adw(seg_interrupt=0, payload=xdw_payload.XdwPayloadSegmentArb(segment_idx=13), freq_offset=-100e6)
+
+    #ADW to play pre-calculated ARB segment with index #13 ten times with a segment repetition interval of 100µs. The sequence can not be interrupted
+    adw = adw.Adw(seg_interrupt=0, payload=xdw_payload.XdwPayloadSegmentArb(segment_idx=13), extension=xdw_extension.XdwExtensionBurst(pri=100e-6, add_pulses=9))
+
+8. Generate CDWs
+__________________________________
+
+The content of CDWs is, apart from the timing information, identical to TCDWs.
+
+Each timed control descriptor word consists of header, flags and body.
+
+The TCDW header section contains flags which define the command type.
+
+The TCDW flags section contains information about the xDW type, in this case control descriptor word.
+
+The TCDW body section contains values for instrument RF frequency and level.
+
+.. code-block:: python
+
+    """"
+    Generate basic TCDWs
+    """
+    from rsxdwstreaming import ctrl_xdw
+
+    # CDW to switch the instrument RF frequency in path A to a value of 10GHz
+    cdw_freq = ctrl_xdw.TcdwBasic(path=0, cmd=ctrl_xdw.CtrlXdwCmd.FREQ, fval=10e9)
+
+    # CDW to switch the instrument RF level in path B to a value of -20dBm
+    cdw_ampl = ctrl_xdw.TcdwBasic(toa=15, path=1, cmd=ctrl_xdw.CtrlXdwCmd.FREQ, lval=-20)
+
+    # CDW to switch the instrument RF frequency and level in path A to values of 12GHz and -10dBm
+    cdw_freq_ampl = ctrl_xdw.TcdwBasic(toa=23, path=0, cmd=ctrl_xdw.CtrlXdwCmd.FREQ, fval=12e9, lval=-10)
+
+9. Send xDW to streaming interface
+__________________________________
+The generated xDWs can be sent to the streaming interface using the ``send_xdw`` method of the ``XdwStreaming`` class.
+The method takes a bytes object, which is obtained from the xDW by calling ``get_xdw()``
+
+.. code-block:: python
+
+    """"
+    Connect and send to the streaming interface
+    """
+
+    from rsxdwstreaming import xdw_streaming
+
+    # Use the IP address, port number and protocol configured for the streaming interface in the XdwStreaming constructor
+
+    # TCP connection with default network port = 49152
+    xdw_interface = xdw_streaming.XdwStreaming('127.0.0.1')
+
+    # PDW to play real-time pulse with pulse duration of 10 µs at time 5s
+    pdw_unmod = pdw_expert.PdwExpert(toa=5, payload=xdw_payload.PdwPayloadRtUnmod(t_on=10e-6))
+
+    xdw_interface.send_xdw(pdw_unmod.get_xdw())
+
+
+10. Use rsxdwstreaming-GUI
+__________________________
+The rsxdwstreaming package comes with a demo gui. This small tool allows to try out all types of xDWs supported by the
+SMW200A.
+
+.. hint::
+    The demo gui works with Windows 10 (64-bit) and Python 3.10
+
+.. image:: xdw_demo_gui.png
+   :align: center
+
+Configure the SMW200A as described in :ref:`config_smw`.
+
+Run xdw_demo_gui.exe and enter the IP address of the interface in use. Then click on `Connect`. A pop-up message shows,
+if the connection was successful. A small colored square next to the IP address indicates the state of the connection.
+If the connection is closed (=red square) just re-connect by clicking on `Connect`.
+
+Now, select the tab corresponding to the SMW200A configuration to send xDWs.
+For example, if the SMW200A was configured for PDW/TCDW streaming in Expert Mode, you can use the tabs `Expert PDW` and `Expert TCDW`.
+
+.. hint::
+    Please note, that a mixed operation of basic and expert PDWs/TCDWs as well as of PDWs/TCDWs and ADWs/CDWs is not supported.
+
+Click on `Send xDW` to send a xDW to the SMW200A.
+
+Click on `Set To Default` to restore the default settings for the current tab.

@@ -1,0 +1,16 @@
+Descriptor Word Extensions
+__________________________
+.. autoclass:: src.rsxdwstreaming.xdw_extension.PdwParamsStuffing()
+   :noindex:
+
+.. autoclass:: src.rsxdwstreaming.xdw_extension.PdwParamsEdge()
+   :noindex:
+
+.. autoclass:: src.rsxdwstreaming.xdw_extension.XdwExtensionUnused()
+   :noindex:
+
+.. autoclass:: src.rsxdwstreaming.xdw_extension.XdwExtensionEdge()
+   :noindex:
+
+.. autoclass:: src.rsxdwstreaming.xdw_extension.XdwExtensionBurst()
+   :noindex:

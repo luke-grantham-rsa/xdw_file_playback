@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started &mdash; rsxdwstreaming 2.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Revision History" href="revision_history.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> rsxdwstreaming
+          </a>
+              <div class="version">
+                2.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="revision_history.html">Revision History</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">1. Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">2. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configure-the-smw200a-for-xdw-streaming">3. Configure the SMW200A for xDW streaming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connecting-to-the-streaming-interface">4. Connecting to the streaming interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-basic-and-expert-pdws">5. Generate basic and expert PDWs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-basic-and-expert-tcdws">6. Generate basic and expert TCDWs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-adws">7. Generate ADWs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-cdws">8. Generate CDWs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#send-xdw-to-streaming-interface">9. Send xDW to streaming interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-rsxdwstreaming-gui">10. Use rsxdwstreaming-GUI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rs_descriptor_words.html">Rohde &amp; Schwarz Descriptor Words (xDW)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">rsxdwstreaming</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Getting Started</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/getting_started.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h1>
+<section id="introduction">
+<h2>1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p>rsxdwstreaming is a Python module to generate Rohde &amp; Schwarz descriptor words and send them to the Advanced Data /
+Control or HS DIGIQ interface in the R&amp;S®SMW200A.</p>
+<p>This guide shall help to</p>
+<ul class="simple">
+<li><p>Establish a TCP or UDP connection to the SMW200A Advanced Data / Control interface</p></li>
+<li><p>Generate descriptor words, like pulse descriptor words (PDW), (timed) control descriptor words (TCDW/CDW) or ARB descriptor words (ADW)</p></li>
+<li><p>Comfortably use descriptor word extensions</p></li>
+<li><p>Send the descriptor words via the TCP or UDP connection</p></li>
+</ul>
+<p>Check out rsxdwstreaming full examples here: <a class="reference external" href="examples.html">rsxdwstreaming Examples</a>.</p>
+<p>Interface Control Documents:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="www.rohde-schwarz.com/appnote/1GP133">PDW/TCDW streaming</a> (SMW-K503/-K504)</p></li>
+<li><p><a class="reference external" href="www.rohde-schwarz.com/appnote/1GP134">ADW/CDW streaming</a> (SMW-K506)</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>2. Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<p>rsxdwstreaming is distributed as wheel file. You can install it with pip (for example, <code class="docutils literal notranslate"><span class="pre">pip.exe</span></code> for Windows)</p>
+<ul>
+<li><p>Save the rsxdwstreaming package on your computer, for example in <code class="docutils literal notranslate"><span class="pre">c:\temp\</span></code></p></li>
+<li><p>Start the command line <code class="docutils literal notranslate"><span class="pre">WinKey</span> <span class="pre">+</span> <span class="pre">R</span></code>, type <code class="docutils literal notranslate"><span class="pre">cmd</span></code> and hit ENTER</p></li>
+<li><p>Change the working directory to the Python installation of your choice (adjust the user name and python version in the path):</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">c:\Users\John\AppData\Local\Programs\Python\Python37\Scripts</span></code></p>
+</div></blockquote>
+</li>
+<li><p>Install with the command: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">c:\temp\rsxdwstreaming_v1.0.0.tar</span></code></p></li>
+</ul>
+</section>
+<section id="configure-the-smw200a-for-xdw-streaming">
+<span id="config-smw"></span><h2>3. Configure the SMW200A for xDW streaming<a class="headerlink" href="#configure-the-smw200a-for-xdw-streaming" title="Permalink to this headline"></a></h2>
+<p>The first step towards streaming xDWs is to configure the SMW200A.</p>
+<p class="rubric">Cabling</p>
+<ul class="simple">
+<li><p>Power up the SMW200A</p></li>
+<li><p>Connect the LAN interface of the SMW200A to your network</p></li>
+<li><p>Connect the interface labeled <code class="docutils literal notranslate"><span class="pre">ADV</span> <span class="pre">DATA</span> <span class="pre">/</span> <span class="pre">CTRL</span> <span class="pre">1</span></code> to your network for PDW/TCDW streaming</p></li>
+<li><p>Connect the interface labeled <code class="docutils literal notranslate"><span class="pre">HS</span> <span class="pre">DIGIQ</span></code> to your network for ADW/CDW streaming</p></li>
+</ul>
+<p class="rubric">GUI</p>
+<ul class="simple">
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">Baseband-&gt;Misc-&gt;Extended</span> <span class="pre">Sequencer</span></code></p></li>
+</ul>
+<p>For PDW and TCDW streaming</p>
+<ul class="simple">
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">Mode-&gt;Real</span> <span class="pre">Time</span> <span class="pre">Control</span> <span class="pre">Interface</span></code></p></li>
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">Local</span> <span class="pre">ADV</span> <span class="pre">DATA/CTRL</span> <span class="pre">Network</span> <span class="pre">Settings&quot;</span></code> to configure the IP address, port number and protocol of the <code class="docutils literal notranslate"><span class="pre">ADV</span> <span class="pre">DATA</span> <span class="pre">/</span> <span class="pre">CTRL</span> <span class="pre">1</span></code> interface</p></li>
+</ul>
+<p>For ADW and TDW streaming</p>
+<ul class="simple">
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">Mode-&gt;Agile</span> <span class="pre">Sequencing</span></code></p></li>
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">Local</span> <span class="pre">QSFP</span> <span class="pre">Network</span> <span class="pre">Settings</span></code> to configure the IP address, port number and protocol of the <code class="docutils literal notranslate"><span class="pre">HS</span> <span class="pre">DIGIQ</span> <span class="pre">IN/OUT</span> <span class="pre">1</span></code> interface</p></li>
+</ul>
+<p>More information on the configuration is available in the
+<a class="reference external" href="https://www.rohde-schwarz.com/us/manual/r-s-smw-k501-k502-k503-k504-k315-extended-and-real-time-sequencing-user-manual-manuals-gb1_78701-249480.html">R&amp;S®SMW200A Extended and Real Time Sequencing User Manual</a></p>
+</section>
+<section id="connecting-to-the-streaming-interface">
+<h2>4. Connecting to the streaming interface<a class="headerlink" href="#connecting-to-the-streaming-interface" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">Connect to the streaming interface</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">rsxdwstreaming</span> <span class="kn">import</span> <span class="n">xdw_streaming</span>
+
+<span class="c1"># Use the IP address, port number and protocol configured for the streaming interface in the XdwStreaming constructor</span>
+
+<span class="c1"># TCP connection with default network port = 49152</span>
+<span class="n">xdw_interface</span> <span class="o">=</span> <span class="n">xdw_streaming</span><span class="o">.</span><span class="n">XdwStreaming</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">)</span>
+
+<span class="c1"># UDP connection with default network port = 49152</span>
+<span class="n">xdw_interface</span> <span class="o">=</span> <span class="n">xdw_streaming</span><span class="o">.</span><span class="n">XdwStreaming</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">49152</span><span class="p">,</span> <span class="s1">&#39;UDP&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In time critical applications it might be necessary to send the PDWs/TCDWs as soon as they are available/computed. In that case,
+you can set the option <code class="docutils literal notranslate"><span class="pre">TCP_NODElAY</span></code> in the constructor.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">Connect to the streaming interface</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">rsxdwstreaming</span> <span class="kn">import</span> <span class="n">xdw_streaming</span>
+<span class="kn">from</span> <span class="nn">socket</span> <span class="kn">import</span> <span class="n">socket</span>
+
+<span class="c1"># TCP connection with default network port = 49152 and disabled Nagle&#39;s algorithm, by setting TCP_NODELAY</span>
+<span class="n">xdw_interface</span> <span class="o">=</span> <span class="n">xdw_streaming</span><span class="o">.</span><span class="n">XdwStreaming</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">49152</span><span class="p">,</span> <span class="s1">&#39;TCP&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_TCP</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">TCP_NODELAY</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-basic-and-expert-pdws">
+<h2>5. Generate basic and expert PDWs<a class="headerlink" href="#generate-basic-and-expert-pdws" title="Permalink to this headline"></a></h2>
+<p>Each pulse descriptor word consists of header, flags, body and payload.</p>
+<p>The header and flags section of each PDW contain information about the timing and the content (structure) of
+the PDW. Using the rsxdwstreaming package, it is sufficient to provide the timing and and information about marker signals.</p>
+<p>Information about the RF characteristics of the desired signal are given in the body section</p>
+<p>The payload section either addresses a pre-calculated ARB segment or contains information to generate a pulsed
+signal in real-time</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">Generate basic PDWs</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">rsxdwstreaming</span> <span class="kn">import</span> <span class="n">pdw_basic</span><span class="p">,</span> <span class="n">xdw_payload</span>
+
+<span class="c1"># PDW to play pre-calculated ARB segment with index #0 at time 0s</span>
+<span class="n">pdw_arb</span> <span class="o">=</span> <span class="n">pdw_basic</span><span class="o">.</span><span class="n">PdwBasic</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">xdw_payload</span><span class="o">.</span><span class="n">XdwPayloadSegmentArb</span><span class="p">(</span><span class="n">segment_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+<span class="c1"># PDW to play real-time pulse with pulse duration of 10 µs at time 5s, Marker 1 is high</span>
+<span class="n">pdw_unmod</span> <span class="o">=</span> <span class="n">pdw_basic</span><span class="o">.</span><span class="n">PdwBasic</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">xdw_payload</span><span class="o">.</span><span class="n">PdwPayloadRtUnmod</span><span class="p">(</span><span class="n">t_on</span><span class="o">=</span><span class="mf">10e-6</span><span class="p">),</span> <span class="n">m1</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># PDW to play real-time pulse with pulse duration of 10 µs at time 5s a level offset (attenuation) of 3dB  and a frequency offset of 100MHz</span>
+<span class="n">pdw_offsets</span> <span class="o">=</span> <span class="n">pdw_basic</span><span class="o">.</span><span class="n">PdwBasic</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">xdw_payload</span><span class="o">.</span><span class="n">PdwPayloadRtUnmod</span><span class="p">(</span><span class="n">t_on</span><span class="o">=</span><span class="mf">10e-6</span><span class="p">),</span> <span class="n">level_offset</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span> <span class="n">freq_offset</span><span class="o">=</span><span class="mf">100e6</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The expert pulse descriptor word format additionally can contain a parameter section or extensions. A mix of
+basic and expert format during a running simulation is not possible.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">Generate expert PDWs</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">rsxdwstreaming</span> <span class="kn">import</span> <span class="n">pdw_expert</span><span class="p">,</span> <span class="n">xdw_payload</span><span class="p">,</span> <span class="n">xdw_extension</span>
+
+<span class="c1"># PDW to play real-time pulse with pulse duration of 10 µs at time 5s</span>
+<span class="n">pdw_unmod</span> <span class="o">=</span> <span class="n">pdw_expert</span><span class="o">.</span><span class="n">PdwExpert</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">xdw_payload</span><span class="o">.</span><span class="n">PdwPayloadRtUnmod</span><span class="p">(</span><span class="n">t_on</span><span class="o">=</span><span class="mf">10e-6</span><span class="p">))</span>
+
+<span class="c1"># PDW to play real-time pulses with linear rising/falling edges (rise/fall time: 2µs), pulse duration of 5µs at time 5s</span>
+<span class="n">pdw_param</span> <span class="o">=</span> <span class="n">pdw_expert</span><span class="o">.</span><span class="n">PdwExpert</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">xdw_payload</span><span class="o">.</span><span class="n">PdwPayloadRtUnmod</span><span class="p">(</span><span class="n">t_on</span><span class="o">=</span><span class="mf">5e-6</span><span class="p">),</span> <span class="n">param</span><span class="o">=</span><span class="n">xdw_extension</span><span class="o">.</span><span class="n">PdwParamsEdge</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">2e-6</span><span class="p">))</span>
+
+<span class="c1"># PDW to play 5 real-time pulses with pulse duration of 10µs and PRI of 100µs at time 5s</span>
+<span class="n">pdw_burst</span> <span class="o">=</span> <span class="n">pdw_expert</span><span class="o">.</span><span class="n">PdwExpert</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">xdw_payload</span><span class="o">.</span><span class="n">PdwPayloadRtUnmod</span><span class="p">(</span><span class="n">t_on</span><span class="o">=</span><span class="mf">10e-6</span><span class="p">),</span> <span class="n">extension1</span><span class="o">=</span><span class="n">xdw_extension</span><span class="o">.</span><span class="n">XdwExtensionBurst</span><span class="p">(</span><span class="n">pri</span><span class="o">=</span><span class="mf">100e-6</span><span class="p">,</span> <span class="n">add_pulses</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-basic-and-expert-tcdws">
+<h2>6. Generate basic and expert TCDWs<a class="headerlink" href="#generate-basic-and-expert-tcdws" title="Permalink to this headline"></a></h2>
+<p>The content of basic and expert TCDWs is identical, but the structure differs slightly. Depending on the <code class="docutils literal notranslate"><span class="pre">PDW</span> <span class="pre">Format</span></code>
+selected in the GUI of the SMW200A, either basic or expert TCDWs are used.</p>
+<p>Each timed control descriptor word consists of header, flags and body.</p>
+<p>The TCDW header section contains the TOA and flags which define the command type.</p>
+<p>The TCDW flags section contains information about the xDW type, in this case (timed) control descriptor word.</p>
+<p>The TCDW body section contains values for instrument RF frequency and level.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">Generate basic TCDWs</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">rsxdwstreaming</span> <span class="kn">import</span> <span class="n">ctrl_xdw</span>
+
+<span class="c1"># TCDW to switch the instrument RF frequency in path A to a value of 10GHz at time 10s</span>
+<span class="n">tcdw_freq</span> <span class="o">=</span> <span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">TcdwBasic</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">CtrlXdwCmd</span><span class="o">.</span><span class="n">FREQ</span><span class="p">,</span> <span class="n">fval</span><span class="o">=</span><span class="mf">10e9</span><span class="p">)</span>
+
+<span class="c1"># TCDW to switch the instrument RF level in path B to a value of -20dBm at time 15s</span>
+<span class="n">tcdw_ampl</span> <span class="o">=</span> <span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">TcdwBasic</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">CtrlXdwCmd</span><span class="o">.</span><span class="n">FREQ</span><span class="p">,</span> <span class="n">lval</span><span class="o">=-</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># TCDW to switch the instrument RF frequency and level in path A to values of 12GHz and -10dBm at time 23s</span>
+<span class="n">tcdw_freq_ampl</span> <span class="o">=</span> <span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">TcdwBasic</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">23</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">CtrlXdwCmd</span><span class="o">.</span><span class="n">FREQ</span><span class="p">,</span> <span class="n">fval</span><span class="o">=</span><span class="mf">12e9</span><span class="p">,</span> <span class="n">lval</span><span class="o">=-</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># TCDW to re-arm Extended Sequencer block A at time 40s</span>
+<span class="n">tcdw_rearm</span> <span class="o">=</span> <span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">TcdwBasic</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">CtrlXdwCmd</span><span class="o">.</span><span class="n">ARM</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">Generate expert TCDWs</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">rsxdwstreaming</span> <span class="kn">import</span> <span class="n">ctrl_xdw</span>
+
+<span class="c1"># TCDW to switch the instrument RF frequency in path A to a value of 10GHz at time 10s</span>
+<span class="n">tcdw_freq</span> <span class="o">=</span> <span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">TcdwExpert</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">CtrlXdwCmd</span><span class="o">.</span><span class="n">FREQ</span><span class="p">,</span> <span class="n">fval</span><span class="o">=</span><span class="mf">10e9</span><span class="p">)</span>
+
+<span class="c1"># TCDW to switch the instrument RF level in path B to a value of -20dBm at time 15s</span>
+<span class="n">tcdw_ampl</span> <span class="o">=</span> <span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">TcdwExpert</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">CtrlXdwCmd</span><span class="o">.</span><span class="n">FREQ</span><span class="p">,</span> <span class="n">lval</span><span class="o">=-</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># TCDW to switch the instrument RF frequency and level in path A to values of 12GHz and -10dBm at time 23s</span>
+<span class="n">tcdw_freq_ampl</span> <span class="o">=</span> <span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">TcdwExpert</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">23</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">CtrlXdwCmd</span><span class="o">.</span><span class="n">FREQ</span><span class="p">,</span> <span class="n">fval</span><span class="o">=</span><span class="mf">12e9</span><span class="p">,</span> <span class="n">lval</span><span class="o">=-</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># TCDW to re-arm Extended Sequencer block A at time 40s</span>
+<span class="n">tcdw_rearm</span> <span class="o">=</span> <span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">TcdwExpert</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">CtrlXdwCmd</span><span class="o">.</span><span class="n">ARM</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-adws">
+<h2>7. Generate ADWs<a class="headerlink" href="#generate-adws" title="Permalink to this headline"></a></h2>
+<p>Each ARB descriptor word consists of header, flags, body and payload.</p>
+<p>The ADW header section contains flags which define the content of the ADW.</p>
+<p>In the ADW flags section, you can configure,
+if an ARB segment can be interrupted by a subsequent ADW or not and it contains information about the marker signals.</p>
+<p>Information about the RF characteristics of the desired signal are given in the body section</p>
+<p>The payload section contains the segment index of a pre-calculated ARB segment.
+If configured in the header, the ADW extension can be used to generate multiple repetitions</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">Generate ADWs</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">rsxdwstreaming</span> <span class="kn">import</span> <span class="n">adw</span><span class="p">,</span> <span class="n">xdw_payload</span><span class="p">,</span> <span class="n">xdw_extension</span>
+
+<span class="c1">#ADW to play pre-calculated ARB segment with index #13 with a frequency offset of -100MHz The segment can not be interrupted</span>
+<span class="n">adw</span> <span class="o">=</span> <span class="n">adw</span><span class="o">.</span><span class="n">Adw</span><span class="p">(</span><span class="n">seg_interrupt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">xdw_payload</span><span class="o">.</span><span class="n">XdwPayloadSegmentArb</span><span class="p">(</span><span class="n">segment_idx</span><span class="o">=</span><span class="mi">13</span><span class="p">),</span> <span class="n">freq_offset</span><span class="o">=-</span><span class="mf">100e6</span><span class="p">)</span>
+
+<span class="c1">#ADW to play pre-calculated ARB segment with index #13 ten times with a segment repetition interval of 100µs. The sequence can not be interrupted</span>
+<span class="n">adw</span> <span class="o">=</span> <span class="n">adw</span><span class="o">.</span><span class="n">Adw</span><span class="p">(</span><span class="n">seg_interrupt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">xdw_payload</span><span class="o">.</span><span class="n">XdwPayloadSegmentArb</span><span class="p">(</span><span class="n">segment_idx</span><span class="o">=</span><span class="mi">13</span><span class="p">),</span> <span class="n">extension</span><span class="o">=</span><span class="n">xdw_extension</span><span class="o">.</span><span class="n">XdwExtensionBurst</span><span class="p">(</span><span class="n">pri</span><span class="o">=</span><span class="mf">100e-6</span><span class="p">,</span> <span class="n">add_pulses</span><span class="o">=</span><span class="mi">9</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-cdws">
+<h2>8. Generate CDWs<a class="headerlink" href="#generate-cdws" title="Permalink to this headline"></a></h2>
+<p>The content of CDWs is, apart from the timing information, identical to TCDWs.</p>
+<p>Each timed control descriptor word consists of header, flags and body.</p>
+<p>The TCDW header section contains flags which define the command type.</p>
+<p>The TCDW flags section contains information about the xDW type, in this case control descriptor word.</p>
+<p>The TCDW body section contains values for instrument RF frequency and level.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">Generate basic TCDWs</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">rsxdwstreaming</span> <span class="kn">import</span> <span class="n">ctrl_xdw</span>
+
+<span class="c1"># CDW to switch the instrument RF frequency in path A to a value of 10GHz</span>
+<span class="n">cdw_freq</span> <span class="o">=</span> <span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">TcdwBasic</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">CtrlXdwCmd</span><span class="o">.</span><span class="n">FREQ</span><span class="p">,</span> <span class="n">fval</span><span class="o">=</span><span class="mf">10e9</span><span class="p">)</span>
+
+<span class="c1"># CDW to switch the instrument RF level in path B to a value of -20dBm</span>
+<span class="n">cdw_ampl</span> <span class="o">=</span> <span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">TcdwBasic</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">CtrlXdwCmd</span><span class="o">.</span><span class="n">FREQ</span><span class="p">,</span> <span class="n">lval</span><span class="o">=-</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># CDW to switch the instrument RF frequency and level in path A to values of 12GHz and -10dBm</span>
+<span class="n">cdw_freq_ampl</span> <span class="o">=</span> <span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">TcdwBasic</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">23</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">ctrl_xdw</span><span class="o">.</span><span class="n">CtrlXdwCmd</span><span class="o">.</span><span class="n">FREQ</span><span class="p">,</span> <span class="n">fval</span><span class="o">=</span><span class="mf">12e9</span><span class="p">,</span> <span class="n">lval</span><span class="o">=-</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="send-xdw-to-streaming-interface">
+<h2>9. Send xDW to streaming interface<a class="headerlink" href="#send-xdw-to-streaming-interface" title="Permalink to this headline"></a></h2>
+<p>The generated xDWs can be sent to the streaming interface using the <code class="docutils literal notranslate"><span class="pre">send_xdw</span></code> method of the <code class="docutils literal notranslate"><span class="pre">XdwStreaming</span></code> class.
+The method takes a bytes object, which is obtained from the xDW by calling <code class="docutils literal notranslate"><span class="pre">get_xdw()</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">Connect and send to the streaming interface</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">rsxdwstreaming</span> <span class="kn">import</span> <span class="n">xdw_streaming</span>
+
+<span class="c1"># Use the IP address, port number and protocol configured for the streaming interface in the XdwStreaming constructor</span>
+
+<span class="c1"># TCP connection with default network port = 49152</span>
+<span class="n">xdw_interface</span> <span class="o">=</span> <span class="n">xdw_streaming</span><span class="o">.</span><span class="n">XdwStreaming</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">)</span>
+
+<span class="c1"># PDW to play real-time pulse with pulse duration of 10 µs at time 5s</span>
+<span class="n">pdw_unmod</span> <span class="o">=</span> <span class="n">pdw_expert</span><span class="o">.</span><span class="n">PdwExpert</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">xdw_payload</span><span class="o">.</span><span class="n">PdwPayloadRtUnmod</span><span class="p">(</span><span class="n">t_on</span><span class="o">=</span><span class="mf">10e-6</span><span class="p">))</span>
+
+<span class="n">xdw_interface</span><span class="o">.</span><span class="n">send_xdw</span><span class="p">(</span><span class="n">pdw_unmod</span><span class="o">.</span><span class="n">get_xdw</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="use-rsxdwstreaming-gui">
+<h2>10. Use rsxdwstreaming-GUI<a class="headerlink" href="#use-rsxdwstreaming-gui" title="Permalink to this headline"></a></h2>
+<p>The rsxdwstreaming package comes with a demo gui. This small tool allows to try out all types of xDWs supported by the
+SMW200A.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>The demo gui works with Windows 10 (64-bit) and Python 3.10</p>
+</div>
+<img alt="_images/xdw_demo_gui.png" class="align-center" src="_images/xdw_demo_gui.png" />
+<p>Configure the SMW200A as described in <a class="reference internal" href="#config-smw"><span class="std std-ref">3. Configure the SMW200A for xDW streaming</span></a>.</p>
+<p>Run xdw_demo_gui.exe and enter the IP address of the interface in use. Then click on <cite>Connect</cite>. A pop-up message shows,
+if the connection was successful. A small colored square next to the IP address indicates the state of the connection.
+If the connection is closed (=red square) just re-connect by clicking on <cite>Connect</cite>.</p>
+<p>Now, select the tab corresponding to the SMW200A configuration to send xDWs.
+For example, if the SMW200A was configured for PDW/TCDW streaming in Expert Mode, you can use the tabs <cite>Expert PDW</cite> and <cite>Expert TCDW</cite>.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Please note, that a mixed operation of basic and expert PDWs/TCDWs as well as of PDWs/TCDWs and ADWs/CDWs is not supported.</p>
+</div>
+<p>Click on <cite>Send xDW</cite> to send a xDW to the SMW200A.</p>
+<p>Click on <cite>Set To Default</cite> to restore the default settings for the current tab.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="revision_history.html" class="btn btn-neutral float-left" title="Revision History" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright © Rohde &amp; Schwarz 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

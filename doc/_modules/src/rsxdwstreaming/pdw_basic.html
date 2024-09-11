@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.rsxdwstreaming.pdw_basic &mdash; rsxdwstreaming 2.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> rsxdwstreaming
+          </a>
+              <div class="version">
+                2.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../revision_history.html">Revision History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rs_descriptor_words.html">Rohde &amp; Schwarz Descriptor Words (xDW)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">rsxdwstreaming</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>src.rsxdwstreaming.pdw_basic</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.rsxdwstreaming.pdw_basic</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">bitstring</span>
+<span class="kn">from</span> <span class="nn">.xdw</span> <span class="kn">import</span> <span class="n">Xdw</span>
+<span class="kn">from</span> <span class="nn">.xdw_format</span> <span class="kn">import</span> <span class="n">XdwFormat</span>
+
+
+<div class="viewcode-block" id="PdwBasic"><a class="viewcode-back" href="../../../rs_descriptor_words.html#src.rsxdwstreaming.pdw_basic.PdwBasic">[docs]</a><span class="k">class</span> <span class="nc">PdwBasic</span><span class="p">(</span><span class="n">Xdw</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Basic pulse descriptor word (PDW) class</span>
+
+<span class="sd">    :param payload: PDW payload</span>
+<span class="sd">    :keyword toa: time-of-arrival (toa) describes the time of playback relative to simulation start</span>
+<span class="sd">    :keyword ignore_xdw: Flag to determine if PDW is ignored</span>
+<span class="sd">    :keyword phase_mod: Flag to set phase mode to absolute (=0) or relative (=1)</span>
+<span class="sd">    :keyword m1: Marker 1</span>
+<span class="sd">    :keyword m2: Marker 2</span>
+<span class="sd">    :keyword m3: Marker 3</span>
+<span class="sd">    :keyword freq_offset: Frequency offset in Hertz</span>
+<span class="sd">    :keyword level_offset: Level offset in dB</span>
+<span class="sd">    :keyword phase_offset: Phase offset in degree</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">xdw_format</span><span class="o">=</span><span class="n">XdwFormat</span><span class="o">.</span><span class="n">PDW_BASIC</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PdwBasic.create_xdw_header"><a class="viewcode-back" href="../../../rs_descriptor_words.html#src.rsxdwstreaming.pdw_basic.PdwBasic.create_xdw_header">[docs]</a>    <span class="k">def</span> <span class="nf">create_xdw_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Assemble basic PDW header and write to member variable</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">toa_ticks</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">toa</span> <span class="o">*</span> <span class="mf">2.4e9</span><span class="p">)</span>
+
+        <span class="n">bs_packed</span> <span class="o">=</span> <span class="n">bitstring</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;uint:44, uint:1, uint:3&#39;</span><span class="p">,</span>
+                                   <span class="n">toa_ticks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b_xdw_header</span> <span class="o">=</span> <span class="n">bs_packed</span><span class="o">.</span><span class="n">bytes</span></div>
+
+<div class="viewcode-block" id="PdwBasic.get_xdw"><a class="viewcode-back" href="../../../rs_descriptor_words.html#src.rsxdwstreaming.pdw_basic.PdwBasic.get_xdw">[docs]</a>    <span class="k">def</span> <span class="nf">get_xdw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Assemble basic PDW from header, flags, body and payload</span>
+
+<span class="sd">        :return: Raw basic PDW</span>
+<span class="sd">        :rtype: Bytes Object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_xdw_payload</span><span class="p">()</span>  <span class="c1"># create payload first as this function sets data used by flags and header</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_xdw_header</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_xdw_flags</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_xdw_body</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_xdw_header</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_xdw_flags</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_xdw_body</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_xdw_payload</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright © Rohde &amp; Schwarz 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

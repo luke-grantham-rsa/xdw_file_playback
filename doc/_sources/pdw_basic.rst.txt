@@ -1,0 +1,6 @@
+Basic Pulse Descriptor Word (Basic PDW)
+_______________________________________
+.. autoclass:: src.rsxdwstreaming.pdw_basic.PdwBasic(payload, **kwargs)
+   :members:
+   :undoc-members:
+   :noindex:

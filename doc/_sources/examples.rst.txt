@@ -1,0 +1,213 @@
+Examples
+========
+
+Streaming basic PDWs and TCDWs
+
+.. code-block:: python
+
+    """Getting started - how to work with rsxdwstreaming Python package.
+    This example performs basic 'Extended Sequencer' settings for PDW/TCDW streaming on an SMW200A instrument.
+    It contains the SCPI sequence to configure the SMW200A, the code to generate basic PDWs and TCDWs and the calls to send
+    those to the Advanced Data / Control interface of the SMW200A."""
+
+    from RsInstrument import *
+    from rsxdwstreaming import pdw_basic, xdw_payload, ctrl_xdw, xdw_streaming
+
+    # Open connection to remote control interface of SMW200A
+    smw = RsInstrument('TCPIP::SMW200A-999999::hislip0')
+
+    # Select 'Real Time Control Interface' Mode
+    smw.write('SOURce1:BB:ESEQuencer:MODE RTCI')
+
+    # Select PDW Format 'Basic'
+    smw.write('SOURce1:BB:ESEQuencer:RTCI:PDWFormat BASic')
+
+    # Configure static IP address, subnet mask and network port
+    smw.write('SYSTem:COMMunicate:BB1:NETWork:IPADdress:MODE STATic')
+    smw.write('SYSTem:COMMunicate:BB1:NETWork:IPADdress "127.0.0.1"')
+    smw.write('SYSTem:COMMunicate:BB1:NETWork:IPADdress:SUBNet:MASK "255.255.255.0"')
+    smw.write('SYSTem:COMMunicate:BB1:NETWork:PORT 49152')
+
+    # Set Trigger Mode to 'Armed Auto'
+    smw.write('SOURce1:bb:ESEQuencer:TRIGger:SEQuence AAUTo')
+
+    # Switch Extended Sequencer State to ON
+    smw.write('SOURce1:BB:ESEQuencer:STATe 1')
+
+    # Set instrument RF frequency and level and activate RF output
+    smw.write('FREQuency 10e9')
+    smw.write('LEVEL -20')
+    smw.write('OUTPut1:STATe 1')
+
+    # Establish connection to PDW/TCDW streaming interface
+    pdw_interface = xdw_streaming.XdwStreaming("127.0.0.1", 49152, 'TCP')
+
+    # Generate first PDW (Unmodulated rectangular pulse, pulse width: 10µs, center frequency: 9.7 GHz, TOA: 0s)
+    pdw_a = pdw_basic.PdwBasic(toa=0, payload=xdw_payload.PdwPayloadRtUnmod(t_on=10e-6), freq_offset=-300e6)
+    pdw_interface.send_xdw(pdw_a.get_xdw())
+
+    # Generate second PDW (Unmodulated rectangular pulse, pulse width: 10µs, center frequency: 10.3 GHz, power level: -25dBm, TOA: 100µs)
+    pdw_b = pdw_basic.PdwBasic(toa=100e-6, payload=xdw_payload.PdwPayloadRtUnmod(t_on=10e-6), freq_offset=300e6, level_offset=5)
+    pdw_interface.send_xdw(pdw_b.get_xdw())
+
+    # Generate first TCDW (Change instrument RF frequency, Path: A, new RF frequency: 14GHz, TOA: 110µs)
+    tcdw_a = ctrl_xdw.TcdwBasic(toa=110e-6, path=0, cmd=ctrl_xdw.CtrlXdwCmd.FREQ, fval=14e9)
+    pdw_interface.send_xdw(tcdw_a.get_xdw())
+
+    # Generate third PDW (Linear frequency modulated pulse, pulse width: 200µs, bandwidth: 300MHz center frequency: 14 GHz, TOA: 3.0ms)
+    pdw_c = pdw_basic.PdwBasic(toa=3e-3, payload=xdw_payload.PdwPayloadRtChirpLinear(t_on=200e-6, freq_step=625), freq_offset=-150e6)
+    pdw_interface.send_xdw(pdw_c.get_xdw())
+
+    # Generate fourth PDW (Barker coded pulse (R13), pulse width: 13*10µs, center frequency: 14.6 GHz, TOA: 3.3ms)
+    pdw_d = pdw_basic.PdwBasic(toa=3.3e-3, payload=xdw_payload.PdwPayloadRtBarker(chip_width=10e-6, code=8), freq_offset=600e6)
+    pdw_interface.send_xdw(pdw_d.get_xdw())
+
+    # Execute trigger
+    smw.write('SOURce1:bb:ESEQuencer:TRIGger:EXECute')
+
+    # Print number of executed and dropped PDWs
+    print(f'Executed PDWs: {smw.query("SOURce1:BB:ESEQuencer:RTCI:SEQuencer1:STReam:EXEC?")}')
+    print(f'Dropped PDWs: {smw.query("SOURce1:BB:ESEQuencer:RTCI:SEQuencer1:STReam:DROP?")}')
+
+    # Close session
+    smw.close()
+
+Streaming basic PDWs and TCDWs
+
+.. code-block:: python
+
+ """Getting started - how to work with rsxdwstreaming Python package.
+    This example performs basic 'Extended Sequencer' settings for PDW/TCDW streaming on an SMW200A instrument.
+    It contains the SCPI sequence to configure the SMW200A, the code to generate PDWs and TCDWs and the calls to send
+    those to the Advanced Data / Control interface of the SMW200A."""
+
+    from RsInstrument import *
+    from rsxdwstreaming import pdw_expert, xdw_payload, ctrl_xdw, xdw_streaming, xdw_extension
+
+    # Open connection to remote control interface of SMW200A
+    smw = RsInstrument('TCPIP::10.102.188.84::hislip0')
+
+    # Select 'Real Time Control Interface' Mode
+    smw.write('SOURce1:BB:ESEQuencer:MODE RTCI')
+
+    # Select PDW Format 'Expert'
+    smw.write('SOURce1:BB:ESEQuencer:RTCI:PDWFormat EXPert')
+
+    # Configure static IP address, subnet mask and network port
+    smw.write('SYSTem:COMMunicate:BB1:NETWork:IPADdress:MODE STATic')
+    smw.write('SYSTem:COMMunicate:BB1:NETWork:IPADdress "127.0.0.1"')
+    smw.write('SYSTem:COMMunicate:BB1:NETWork:IPADdress:SUBNet:MASK "255.255.255.0"')
+    smw.write('SYSTem:COMMunicate:BB1:NETWork:PORT 49152')
+
+    # Set Trigger Mode to 'Armed Auto'
+    smw.write('SOURce1:bb:ESEQuencer:TRIGger:SEQuence AAUTo')
+
+    # Switch Extended Sequencer State to ON
+    smw.write('SOURce1:BB:ESEQuencer:STATe 1')
+
+    # Set instrument RF frequency and level and activate RF output
+    smw.write('FREQuency 10e9')
+    smw.write('LEVEL -20')
+    smw.write('OUTPut1:STATe 1')
+
+    # Establish TCP connection to PDW/TCDW streaming interface
+    pdw_interface = xdw_streaming.XdwStreaming("127.0.0.1", 49152, 'TCP')
+
+    # Generate first PDW (Unmodulated rectangular pulse, pulse width: 10µs, center frequency: 9.7 GHz, TOA: 0s)
+    pdw_a = pdw_expert.PdwExpert(toa=0, payload=xdw_payload.PdwPayloadRtUnmod(t_on=10e-6), freq_offset=-300e6)
+    pdw_interface.send_xdw(pdw_a.get_xdw())
+
+    # Generate second PDW (Unmodulated rectangular pulse, pulse width: 10µs, linear pulse edge, rise time: 5µs, fall time: 10µs,
+    # center frequency: 10.3 GHz, power level: -25dBm, TOA: 100µs)
+    pdw_b = pdw_expert.PdwExpert(toa=100e-6, payload=xdw_payload.PdwPayloadRtUnmod(t_on=10e-6), freq_offset=300e6, level_offset=-5,
+                                 extension1=xdw_extension.XdwExtensionEdge(edge_type=0, multiplier=0, rise_time=5e-6, fall_time=10e-6))
+    pdw_interface.send_xdw(pdw_b.get_xdw())
+
+    # Generate first TCDW (Change instrument RF frequency, Path: A, new RF frequency: 14GHz, TOA: 110µs)
+    tcdw_a = ctrl_xdw.TcdwExpert(toa=110e-6, path=0, cmd=ctrl_xdw.CtrlXdwCmd.FREQ, fval=14e9)
+    pdw_interface.send_xdw(tcdw_a.get_xdw())
+
+    # Generate third PDW (Ten times unmodulated rectangular pulse, pulse width: 20µs, raised cosine pulse edge, multiplier: 8, rise time: 8µs, fall time: 16µs,
+    # center frequency: 13.8 GHz, PRI: 100µs, TOA: 3.0ms)
+    pdw_c = pdw_expert.PdwExpert(toa=3e-3, payload=xdw_payload.PdwPayloadRtUnmod(t_on=20e-6), freq_offset=-200e6,
+                                 extension1=xdw_extension.XdwExtensionEdge(edge_type=1, multiplier=1, rise_time=1e-6, fall_time=2e-6),
+                                 extension2=xdw_extension.XdwExtensionBurst(pri=100e-6, add_pulses=9))
+    pdw_interface.send_xdw(pdw_c.get_xdw())
+
+    # Execute trigger
+    smw.write('SOURce1:bb:ESEQuencer:TRIGger:EXECute')
+
+    # Print number of executed and dropped PDWs
+    print(f'Executed PDWs: {smw.query("SOURce1:BB:ESEQuencer:RTCI:SEQuencer1:STReam:EXEC?")}')
+    print(f'Dropped PDWs: {smw.query("SOURce1:BB:ESEQuencer:RTCI:SEQuencer1:STReam:DROP?")}')
+
+    # Close session
+    smw.close()
+
+
+
+Streaming ADWs and CDWs
+
+.. code-block:: python
+
+    """Getting started - how to work with rsxdwstreaming Python package.
+    This example performs basic 'Extended Sequencer' settings for ADW/CDW streaming on an SMW200A instrument.
+    It contains the SCPI sequence to configure the SMW200A, the code to generate ADWs and CDWs and the calls to send
+    those to the HS DIGIQ interface of the SMW200A."""
+
+    from RsInstrument import *
+    from rsxdwstreaming import adw, xdw_payload, ctrl_xdw, xdw_streaming, xdw_extension
+
+    # Open connection to remote control interface of SMW200A
+    smw = RsInstrument('TCPIP::SMW200A-999999::hislip0')
+
+    # Select 'Real Time Control Interface' Mode
+    smw.write('SOURce1:BB:ESEQuencer:MODE RTCI')
+
+    # Select PDW Format 'Basic'
+    smw.write('SOURce1:BB:ESEQuencer:RTCI:PDWFormat BASic')
+
+    # Configure static IP address, subnet mask and network port
+    smw.write('SYSTem:COMMunicate:BB1:NETWork:IPADdress:MODE STATic')
+    smw.write('SYSTem:COMMunicate:BB1:NETWork:IPADdress "127.0.0.1"')
+    smw.write('SYSTem:COMMunicate:BB1:NETWork:IPADdress:SUBNet:MASK "255.255.255.0"')
+    smw.write('SYSTem:COMMunicate:BB1:NETWork:PORT 49152')
+
+    # Set Trigger Mode to 'Armed Auto'
+    smw.write('SOURce1:bb:ESEQuencer:TRIGger:SEQuence AAUTo')
+
+    # Switch Extended Sequencer State to ON
+    smw.write('SOURce1:BB:ESEQuencer:STATe 1')
+
+    # Set instrument RF frequency and level and activate RF output
+    smw.write('FREQuency 10e9')
+    smw.write('LEVEL -20')
+    smw.write('OUTPut1:STATe 1')
+
+    # Establish TCP connection to PDW/TCDW streaming interface
+    pdw_interface = xdw_streaming.XdwStreaming("127.0.0.1", 49152, 'TCP')
+
+    # Generate first ADW (One-time non-interruptable Playback of segment #0, center frequency: 9.7GHz)
+    adw_a = adw.Adw(xdw_payload.XdwPayloadSegmentArb(segment_idx=0), seg_interrupt=0, freq_offset=-300e6)
+    pdw_interface.send_xdw(adw_a.get_xdw())
+
+    # Generate second PDW (Ten-time non-interruptable playback of segment #3 (one-time + 9 add. pulses), repetition interval: 1ms, center frequency: 10 GHz)
+    adw_b = adw.PdwBasic(payload=xdw_payload.XdwPayloadSegmentArb(segment_idx=3), seg_interrupt=0, extension=xdw_extension.XdwExtensionBurst(pri=1e-3, add_pulses=9))
+    pdw_interface.send_xdw(adw_b.get_xdw())
+
+    # Generate first CDW (Change instrument RF frequency, Path: A, new RF frequency: 18GHz, TOA: 110µs)
+    tcdw_a = ctrl_xdw.TcdwBasic(path=0, cmd=ctrl_xdw.CtrlXdwCmd.FREQ, fval=18e9)
+    pdw_interface.send_xdw(tcdw_a.get_xdw())
+
+    # Generate third ADW (One-time interruptable playback of segment #1, center frequency: 18.2 GHz)
+    adw_c = adw.Adw(payload=xdw_payload.XdwPayloadSegmentArb(segment_idx=1), freq_offset=200e6)
+    pdw_interface.send_xdw(adw_c.get_xdw())
+
+    # Execute trigger
+    smw.write('SOURce1:bb:ESEQuencer:TRIGger:EXECute')
+
+    # Print number of executed ADWs
+    print(f'Executed ADWs: {smw.query("SOURce1:BB:ESEQuencer:ASEQuencing:SEQuencer1:STReam:EXEC?")}')
+
+    # Close session
+    smw.close()

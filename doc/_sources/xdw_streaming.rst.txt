@@ -1,0 +1,9 @@
+Descriptor Word Streaming Interface
+___________________________________
+
+.. autoclass:: src.rsxdwstreaming.xdw_streaming.XdwStreaming(if_ip_addr, port, protocol, options)
+   :members:
+   :undoc-members:
+   :noindex:
+
+

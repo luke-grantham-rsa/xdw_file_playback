@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.rsxdwstreaming.ctrl_xdw &mdash; rsxdwstreaming 2.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> rsxdwstreaming
+          </a>
+              <div class="version">
+                2.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../revision_history.html">Revision History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rs_descriptor_words.html">Rohde &amp; Schwarz Descriptor Words (xDW)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">rsxdwstreaming</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>src.rsxdwstreaming.ctrl_xdw</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.rsxdwstreaming.ctrl_xdw</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="kn">import</span> <span class="nn">bitstring</span>
+<span class="kn">from</span> <span class="nn">.xdw_format</span> <span class="kn">import</span> <span class="n">XdwFormat</span>
+
+
+<div class="viewcode-block" id="CtrlXdwCmd"><a class="viewcode-back" href="../../../rs_descriptor_words.html#src.rsxdwstreaming.ctrl_xdw.CtrlXdwCmd">[docs]</a><span class="k">class</span> <span class="nc">CtrlXdwCmd</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Enum for control descriptor word command type</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">FREQ</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">AMPL</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">FREQ_AMPL</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">ARM</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">EOF</span> <span class="o">=</span> <span class="mi">7</span></div>
+
+
+<div class="viewcode-block" id="CtrlXdw"><a class="viewcode-back" href="../../../rs_descriptor_words.html#src.rsxdwstreaming.ctrl_xdw.CtrlXdw">[docs]</a><span class="k">class</span> <span class="nc">CtrlXdw</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for control descriptor words. Only to be used via classes Cdw, TcdwBasic or TcdwExpert.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># pylint: disable=too-many-instance-attributes</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xdw_version</span><span class="p">,</span> <span class="n">allowed_keys</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toa</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span> <span class="o">=</span> <span class="n">CtrlXdwCmd</span><span class="o">.</span><span class="n">FREQ</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fval</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># absolute instrument RF frequency (unsigned int)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lval</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># absolute instrument RF level (signed fixed point)</span>
+
+        <span class="c1"># all variables below shall be treated as private</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xdw_format</span> <span class="o">=</span> <span class="n">xdw_version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b_xdw_header</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b_xdw_body</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_keys</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1"> is not in </span><span class="si">{</span><span class="n">allowed_keys</span><span class="si">}</span><span class="s1">&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">allowed_keys</span><span class="p">)</span>
+
+        <span class="c1"># assert isinstance(self.cmd, CtrlXdwCmd), &#39;unsupported command, shall be of type CtrlXdwCmd&#39;</span>
+
+<div class="viewcode-block" id="CtrlXdw.create_xdw_header"><a class="viewcode-back" href="../../../rs_descriptor_words.html#src.rsxdwstreaming.ctrl_xdw.CtrlXdw.create_xdw_header">[docs]</a>    <span class="k">def</span> <span class="nf">create_xdw_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Assemble xCDW header and write to member variable</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">toa_ticks</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">toa</span> <span class="o">*</span> <span class="mf">2.4e9</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">xdw_format</span> <span class="o">==</span> <span class="n">XdwFormat</span><span class="o">.</span><span class="n">PDW_BASIC</span><span class="p">:</span>
+            <span class="n">bs_packed</span> <span class="o">=</span> <span class="n">bitstring</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;uint:44, uint:1, uint:3, uint:1, uint:15&#39;</span><span class="p">,</span>
+                                       <span class="n">toa_ticks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># PDW_EXPERT and ADW_BASIC</span>
+            <span class="n">bs_packed</span> <span class="o">=</span> <span class="n">bitstring</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;uint:52, uint:1, uint:3, uint:1, uint:7&#39;</span><span class="p">,</span>
+                                       <span class="n">toa_ticks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">b_xdw_header</span> <span class="o">=</span> <span class="n">bs_packed</span><span class="o">.</span><span class="n">bytes</span></div>
+
+<div class="viewcode-block" id="CtrlXdw.create_xdw_body"><a class="viewcode-back" href="../../../rs_descriptor_words.html#src.rsxdwstreaming.ctrl_xdw.CtrlXdw.create_xdw_body">[docs]</a>    <span class="k">def</span> <span class="nf">create_xdw_body</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Assemble xCDW body and write to member variable</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lval</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lval</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># lval calculation</span>
+        <span class="n">lval_sign</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">lval</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span>
+
+        <span class="c1"># doing string conversion, otherwise float resolution brings issues (5.34 -&gt; 5.339999999...)</span>
+        <span class="n">lval_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">lval</span><span class="p">)</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+        <span class="n">lval_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lval_str</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">lval_dec_1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lval_str</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">lval_dec_0_1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lval_str</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">lval_packed</span> <span class="o">=</span> <span class="n">bitstring</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;uint:1, uint:7, uint:4, uint:4, uint:8&#39;</span><span class="p">,</span>
+                                     <span class="n">lval_sign</span><span class="p">,</span> <span class="n">lval_int</span><span class="p">,</span> <span class="n">lval_dec_1</span><span class="p">,</span> <span class="n">lval_dec_0_1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">bs_packed</span> <span class="o">=</span> <span class="n">bitstring</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;uint:40&#39;</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">fval</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">b_xdw_body</span> <span class="o">=</span> <span class="n">bs_packed</span><span class="o">.</span><span class="n">bytes</span> <span class="o">+</span> <span class="n">lval_packed</span><span class="o">.</span><span class="n">bytes</span></div>
+
+<div class="viewcode-block" id="CtrlXdw.get_xdw"><a class="viewcode-back" href="../../../rs_descriptor_words.html#src.rsxdwstreaming.ctrl_xdw.CtrlXdw.get_xdw">[docs]</a>    <span class="k">def</span> <span class="nf">get_xdw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Assemble xCDW from header and body</span>
+
+<span class="sd">        :return: Raw expert PDW</span>
+<span class="sd">        :rtype: Bytes Object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_xdw_body</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_xdw_header</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_xdw_header</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_xdw_body</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">TcdwBasic</span><span class="p">(</span><span class="n">CtrlXdw</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Basic timed control descriptor word (TCDW) class</span>
+
+<span class="sd">    :keyword toa: time-of-arrival (toa) describes the time of execution relative to simulation start</span>
+<span class="sd">    :keyword path: Select instrument RF path, 0 = Path A, 1 = Path B</span>
+<span class="sd">    :keyword fval: Instrument RF frequency value</span>
+<span class="sd">    :keyword lval: Instrument RF level value</span>
+<span class="sd">    :keyword cmd: Command type</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">xdw_version</span><span class="o">=</span><span class="n">XdwFormat</span><span class="o">.</span><span class="n">PDW_BASIC</span><span class="p">,</span> <span class="n">allowed_keys</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;toa&#39;</span><span class="p">,</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="s1">&#39;fval&#39;</span><span class="p">,</span> <span class="s1">&#39;lval&#39;</span><span class="p">,</span> <span class="s1">&#39;cmd&#39;</span><span class="p">},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">TcdwExpert</span><span class="p">(</span><span class="n">CtrlXdw</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Expert timed control descriptor word (TCDW) class</span>
+
+<span class="sd">    :keyword toa: time-of-arrival (toa) describes the time of execution relative to simulation start</span>
+<span class="sd">    :keyword path: Select instrument RF path, 0 = Path A, 1 = Path B</span>
+<span class="sd">    :keyword fval: Instrument RF frequency value</span>
+<span class="sd">    :keyword lval: Instrument RF level value</span>
+<span class="sd">    :keyword cmd: Command type</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">xdw_version</span><span class="o">=</span><span class="n">XdwFormat</span><span class="o">.</span><span class="n">PDW_EXPERT</span><span class="p">,</span> <span class="n">allowed_keys</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;toa&#39;</span><span class="p">,</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="s1">&#39;fval&#39;</span><span class="p">,</span> <span class="s1">&#39;lval&#39;</span><span class="p">,</span> <span class="s1">&#39;cmd&#39;</span><span class="p">},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Cdw</span><span class="p">(</span><span class="n">CtrlXdw</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Control descriptor word (CDW) class</span>
+
+<span class="sd">    :keyword path: Select instrument RF path, 0 = Path A, 1 = Path B</span>
+<span class="sd">    :keyword fval: Instrument RF frequency value</span>
+<span class="sd">    :keyword lval: Instrument RF level value</span>
+<span class="sd">    :keyword cmd: Command type</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">xdw_version</span><span class="o">=</span><span class="n">XdwFormat</span><span class="o">.</span><span class="n">ADW_BASIC</span><span class="p">,</span> <span class="n">allowedd_keys</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="s1">&#39;fval&#39;</span><span class="p">,</span> <span class="s1">&#39;lval&#39;</span><span class="p">,</span> <span class="s1">&#39;cmd&#39;</span><span class="p">},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright © Rohde &amp; Schwarz 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

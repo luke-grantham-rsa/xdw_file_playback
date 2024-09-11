@@ -1,0 +1,10 @@
+Control Descriptor Word (CDW)
+_____________________________
+.. autoclass:: src.rsxdwstreaming.ctrl_xdw.CtrlXdwCmd()
+   :members:
+   :undoc-members:
+   :noindex:
+
+.. autoclass:: src.rsxdwstreaming.ctrl_xdw.CtrlXdw
+   :members:
+   :noindex:

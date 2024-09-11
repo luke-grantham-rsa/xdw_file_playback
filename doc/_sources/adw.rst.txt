@@ -1,0 +1,7 @@
+ARB Descriptor Word (ADW)
+_________________________
+
+.. autoclass:: src.rsxdwstreaming.adw.Adw(payload, seg_interrupt, extension, **kwargs)
+   :members:
+   :undoc-members:
+   :noindex:

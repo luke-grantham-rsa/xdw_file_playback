@@ -1,0 +1,6 @@
+Expert Pulse Descriptor Word (Expert PDW)
+_________________________________________
+.. autoclass:: src.rsxdwstreaming.pdw_expert.PdwExpert(payload, param, extension1, extension2, extension3, **kwargs)
+   :members:
+   :undoc-members:
+   :noindex:

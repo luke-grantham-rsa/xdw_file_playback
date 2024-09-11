@@ -1,0 +1,7 @@
+Descriptor Word Enums (XdwFormat)
+_________________________________
+
+.. autoclass:: src.rsxdwstreaming.xdw_format.XdwFormat()
+   :members:
+   :undoc-members:
+   :noindex:

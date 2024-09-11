@@ -1,0 +1,12 @@
+Rohde & Schwarz Descriptor Words (xDW)
+======================================
+
+.. include:: xdw_streaming.rst
+.. include:: xdw.rst
+.. include:: adw.rst
+.. include:: pdw_basic.rst
+.. include:: pdw_expert.rst
+.. include:: xdw_payload.rst
+.. include:: xdw_extension.rst
+.. include:: ctrl_xdw.rst
+.. include:: xdw_format.rst

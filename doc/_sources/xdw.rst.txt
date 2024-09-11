@@ -1,0 +1,7 @@
+Descriptor Word (Base class)
+____________________________
+
+.. autoclass:: src.rsxdwstreaming.xdw.Xdw()
+    :members:
+    :noindex:
+

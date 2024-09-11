@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDW Payload &mdash; rsxdwstreaming 2.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> rsxdwstreaming
+          </a>
+              <div class="version">
+                2.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="revision_history.html">Revision History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rs_descriptor_words.html">Rohde &amp; Schwarz Descriptor Words (xDW)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">rsxdwstreaming</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>PDW Payload</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/xdw_payload.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pdw-payload">
+<h1>PDW Payload<a class="headerlink" href="#pdw-payload" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_payload.</span></span><span class="sig-name descname"><span class="pre">XdwPayloadSegmentArb</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#XdwPayloadSegmentArb"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Payload class to address pre-calculated ARB segments</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>segment_idx</strong> (<em>int</em>) – list index of addressed segment</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xdw_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#XdwPayloadSegmentArb.get_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble payload and return bytes object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xdw_format</strong> (<em>XdwFormat</em>) – Type of xDW, e.g. PDW_BASIC</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Raw payload</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_payload.</span></span><span class="sig-name descname"><span class="pre">PdwPayloadRtUnmod</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtUnmod"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Payload class to generate unmodulated real-time pulse</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t_on</strong> (<em>float</em>) – duration of pulse (on-time)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xdw_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtUnmod.get_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble payload and return bytes object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xdw_format</strong> (<em>XdwFormat</em>) – Type of xDW, e.g. PDW_BASIC</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Raw payload</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_payload.</span></span><span class="sig-name descname"><span class="pre">PdwPayloadRtChirpLinear</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtChirpLinear"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Payload class to generate linear frequency modulated real-time pulse</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_on</strong> (<em>float</em>) – duration of pulse (on-time)</p></li>
+<li><p><strong>freq_step</strong> (<em>float</em>) – frequency step per sample</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xdw_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtChirpLinear.get_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble payload and return bytes object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xdw_format</strong> (<em>XdwFormat</em>) – Type of xDW, e.g. PDW_BASIC</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Raw payload</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_payload.</span></span><span class="sig-name descname"><span class="pre">PdwPayloadRtChirpTriangular</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtChirpTriangular"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Payload class to generate triangular frequency modulated real-time pulse</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_on</strong> (<em>float</em>) – duration of pulse (on-time)</p></li>
+<li><p><strong>freq_step</strong> (<em>float</em>) – frequency step per sample</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xdw_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtChirpTriangular.get_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble payload and return bytes object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xdw_format</strong> (<em>XdwFormat</em>) – Type of xDW, e.g. PDW_BASIC</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Raw payload</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_payload.</span></span><span class="sig-name descname"><span class="pre">PdwPayloadRtBarker</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtBarker"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Payload class to generate Barker-coded real-time pulse</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chip_width</strong> (<em>float</em>) – duration of single-chip, pulse width = Barker code length * chip_width</p></li>
+<li><p><strong>code</strong> (<em>int</em>) – type of Barker code</p></li>
+<li><p><strong>stuff</strong> (<em>int</em><em>, </em><em>defaults to 0</em>) – stuffing bits</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xdw_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtBarker.get_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble payload and return bytes object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xdw_format</strong> (<em>XdwFormat</em>) – Type of xDW, e.g. PDW_BASIC</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Raw payload</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright © Rohde &amp; Schwarz 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

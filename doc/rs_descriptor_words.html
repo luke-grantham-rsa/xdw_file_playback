@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rohde &amp; Schwarz Descriptor Words (xDW) &mdash; rsxdwstreaming 2.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> rsxdwstreaming
+          </a>
+              <div class="version">
+                2.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="revision_history.html">Revision History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Rohde &amp; Schwarz Descriptor Words (xDW)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#descriptor-word-streaming-interface">Descriptor Word Streaming Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#descriptor-word-base-class">Descriptor Word (Base class)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#arb-descriptor-word-adw">ARB Descriptor Word (ADW)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-pulse-descriptor-word-basic-pdw">Basic Pulse Descriptor Word (Basic PDW)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#expert-pulse-descriptor-word-expert-pdw">Expert Pulse Descriptor Word (Expert PDW)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pdw-payload">PDW Payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#descriptor-word-extensions">Descriptor Word Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#control-descriptor-word-cdw">Control Descriptor Word (CDW)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#descriptor-word-enums-xdwformat">Descriptor Word Enums (XdwFormat)</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">rsxdwstreaming</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Rohde &amp; Schwarz Descriptor Words (xDW)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/rs_descriptor_words.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rohde-schwarz-descriptor-words-xdw">
+<h1>Rohde &amp; Schwarz Descriptor Words (xDW)<a class="headerlink" href="#rohde-schwarz-descriptor-words-xdw" title="Permalink to this headline"></a></h1>
+<section id="descriptor-word-streaming-interface">
+<h2>Descriptor Word Streaming Interface<a class="headerlink" href="#descriptor-word-streaming-interface" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_streaming.</span></span><span class="sig-name descname"><span class="pre">XdwStreaming</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">if_ip_addr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_streaming.html#XdwStreaming"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Initialize the xDW streaming interface to be able to stream xDW data to generator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>if_ip_addr</strong> (<em>str</em>) – IP address of generator interface, e.g. ‘127.0.0.1’</p></li>
+<li><p><strong>port</strong> (<em>int</em>) – network port, defaults to 49152</p></li>
+<li><p><strong>protocol</strong> (<em>str</em>) – desired protocol, either TCP or UDP, defaults to ‘TCP’</p></li>
+<li><p><strong>options</strong> – see socket.setsockopt for more information</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">send_xdw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_streaming.html#XdwStreaming.send_xdw"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Sends a bytes object to the xDW streaming interface</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>bytes object</em>) – raw xDW bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdw_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_streaming.html#XdwStreaming.write_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Writes a list of xDW objects to a binary file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – filename of destination file</p></li>
+<li><p><strong>pdw_list</strong> (<em>list</em>) – List of xDWs</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">stream_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_streaming.html#XdwStreaming.stream_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Streams the content of a binary xDW file to the xDW streaming interface</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – filename of source file</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="descriptor-word-base-class">
+<h2>Descriptor Word (Base class)<a class="headerlink" href="#descriptor-word-base-class" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw.</span></span><span class="sig-name descname"><span class="pre">Xdw</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw.html#Xdw"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Base class for R&amp;S descriptor words. Only to be used via classes Adw, PdwBasic or PdwExpert.</p>
+<dl class="py method">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_xdw_header</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw.html#Xdw.create_xdw_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Abstract method: assemble xDW header and write to member variable</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_xdw_flags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw.html#Xdw.create_xdw_flags"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble xDW flags and write to member variable</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_xdw_body</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw.html#Xdw.create_xdw_body"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble xDW body and write to member variable</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_xdw_payload</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw.html#Xdw.create_xdw_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble xDW payload and write to member variable</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_xdw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw.html#Xdw.get_xdw"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Abstract method: Assemble xDW</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="arb-descriptor-word-adw">
+<h2>ARB Descriptor Word (ADW)<a class="headerlink" href="#arb-descriptor-word-adw" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.adw.</span></span><span class="sig-name descname"><span class="pre">Adw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seg_interrupt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/adw.html#Adw"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>ARB descriptor word (ADW) class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>payload</strong> – ADW payload</p></li>
+<li><p><strong>seg_interrupt</strong> (<em>bool</em>) – Flag to determine if segment can be interrupted, defaults to False</p></li>
+<li><p><strong>extension</strong> – ADW extension, supported: XdwExtensionUnused, XdwExtensionBurst, defaults to XdwExtensionUnused</p></li>
+</ul>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ignore_xdw</strong> – Flag to determine if ADW is ignored</p></li>
+<li><p><strong>m1</strong> – Marker 1</p></li>
+<li><p><strong>m2</strong> – Marker 2</p></li>
+<li><p><strong>m3</strong> – Marker 3</p></li>
+<li><p><strong>freq_offset</strong> – Frequency offset in Hertz</p></li>
+<li><p><strong>level_offset</strong> – Level offset in dB</p></li>
+<li><p><strong>phase_offset</strong> – Phase offset in degree</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_xdw_header</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/adw.html#Adw.create_xdw_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble ADW header and write to member variable</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_xdw_flags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/adw.html#Adw.create_xdw_flags"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble ADW flags and write to member variable</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_xdw_extension</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/adw.html#Adw.create_xdw_extension"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble ADW extension and return bytes object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Raw ADW extension</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_xdw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/adw.html#Adw.get_xdw"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble ADW from header, flags, body, payload and extension</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Raw ADW</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="basic-pulse-descriptor-word-basic-pdw">
+<h2>Basic Pulse Descriptor Word (Basic PDW)<a class="headerlink" href="#basic-pulse-descriptor-word-basic-pdw" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.pdw_basic.</span></span><span class="sig-name descname"><span class="pre">PdwBasic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/pdw_basic.html#PdwBasic"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Basic pulse descriptor word (PDW) class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>payload</strong> – PDW payload</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>toa</strong> – time-of-arrival (toa) describes the time of playback relative to simulation start</p></li>
+<li><p><strong>ignore_xdw</strong> – Flag to determine if PDW is ignored</p></li>
+<li><p><strong>phase_mod</strong> – Flag to set phase mode to absolute (=0) or relative (=1)</p></li>
+<li><p><strong>m1</strong> – Marker 1</p></li>
+<li><p><strong>m2</strong> – Marker 2</p></li>
+<li><p><strong>m3</strong> – Marker 3</p></li>
+<li><p><strong>freq_offset</strong> – Frequency offset in Hertz</p></li>
+<li><p><strong>level_offset</strong> – Level offset in dB</p></li>
+<li><p><strong>phase_offset</strong> – Phase offset in degree</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_xdw_header</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/pdw_basic.html#PdwBasic.create_xdw_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble basic PDW header and write to member variable</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_xdw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/pdw_basic.html#PdwBasic.get_xdw"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble basic PDW from header, flags, body and payload</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Raw basic PDW</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="expert-pulse-descriptor-word-expert-pdw">
+<h2>Expert Pulse Descriptor Word (Expert PDW)<a class="headerlink" href="#expert-pulse-descriptor-word-expert-pdw" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.pdw_expert.</span></span><span class="sig-name descname"><span class="pre">PdwExpert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension3</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/pdw_expert.html#PdwExpert"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Expert pulse descriptor word (PDW) class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>payload</strong> – PDW payload</p>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>toa</strong> – time-of-arrival (toa) describes the time of playback relative to simulation start</p></li>
+<li><p><strong>ignore_xdw</strong> – Flag to determine if PDW is ignored</p></li>
+<li><p><strong>phase_mod</strong> – Flag to set phase mode to absolute (=0) or relative (=1)</p></li>
+<li><p><strong>m1</strong> – Marker 1</p></li>
+<li><p><strong>m2</strong> – Marker 2</p></li>
+<li><p><strong>m3</strong> – Marker 3</p></li>
+<li><p><strong>freq_offset</strong> – Frequency offset in Hertz</p></li>
+<li><p><strong>level_offset</strong> – Level offset in dB</p></li>
+<li><p><strong>phase_offset</strong> – Phase offset in degree</p></li>
+<li><p><strong>param</strong> – PDW parameters, defaults to PdwParamStuffing</p></li>
+<li><p><strong>extension1</strong> – Extension 1, defaults to XdwExtensionUnused</p></li>
+<li><p><strong>extension2</strong> – Extension 2, defaults to XdwExtensionUnused</p></li>
+<li><p><strong>extension3</strong> – Extension 3, defaults to XdwExtensionUnused</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_xdw_header</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/pdw_expert.html#PdwExpert.create_xdw_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble expert PDW header and write to member variable</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_xdw_extension</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/pdw_expert.html#PdwExpert.create_xdw_extension"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble expert PDW extensions and return bytes object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Raw ADW extension</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_xdw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/pdw_expert.html#PdwExpert.get_xdw"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble expert PDW from header, flags, body, params, payload and extensions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Raw expert PDW</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="pdw-payload">
+<h2>PDW Payload<a class="headerlink" href="#pdw-payload" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_payload.</span></span><span class="sig-name descname"><span class="pre">XdwPayloadSegmentArb</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#XdwPayloadSegmentArb"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Payload class to address pre-calculated ARB segments</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>segment_idx</strong> (<em>int</em>) – list index of addressed segment</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xdw_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#XdwPayloadSegmentArb.get_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble payload and return bytes object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xdw_format</strong> (<em>XdwFormat</em>) – Type of xDW, e.g. PDW_BASIC</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Raw payload</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_payload.</span></span><span class="sig-name descname"><span class="pre">PdwPayloadRtUnmod</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtUnmod"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Payload class to generate unmodulated real-time pulse</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t_on</strong> (<em>float</em>) – duration of pulse (on-time)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xdw_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtUnmod.get_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble payload and return bytes object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xdw_format</strong> (<em>XdwFormat</em>) – Type of xDW, e.g. PDW_BASIC</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Raw payload</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_payload.</span></span><span class="sig-name descname"><span class="pre">PdwPayloadRtChirpLinear</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtChirpLinear"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Payload class to generate linear frequency modulated real-time pulse</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_on</strong> (<em>float</em>) – duration of pulse (on-time)</p></li>
+<li><p><strong>freq_step</strong> (<em>float</em>) – frequency step per sample</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xdw_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtChirpLinear.get_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble payload and return bytes object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xdw_format</strong> (<em>XdwFormat</em>) – Type of xDW, e.g. PDW_BASIC</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Raw payload</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_payload.</span></span><span class="sig-name descname"><span class="pre">PdwPayloadRtChirpTriangular</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtChirpTriangular"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Payload class to generate triangular frequency modulated real-time pulse</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_on</strong> (<em>float</em>) – duration of pulse (on-time)</p></li>
+<li><p><strong>freq_step</strong> (<em>float</em>) – frequency step per sample</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xdw_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtChirpTriangular.get_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble payload and return bytes object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xdw_format</strong> (<em>XdwFormat</em>) – Type of xDW, e.g. PDW_BASIC</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Raw payload</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_payload.</span></span><span class="sig-name descname"><span class="pre">PdwPayloadRtBarker</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtBarker"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Payload class to generate Barker-coded real-time pulse</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chip_width</strong> (<em>float</em>) – duration of single-chip, pulse width = Barker code length * chip_width</p></li>
+<li><p><strong>code</strong> (<em>int</em>) – type of Barker code</p></li>
+<li><p><strong>stuff</strong> (<em>int</em><em>, </em><em>defaults to 0</em>) – stuffing bits</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xdw_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_payload.html#PdwPayloadRtBarker.get_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble payload and return bytes object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xdw_format</strong> (<em>XdwFormat</em>) – Type of xDW, e.g. PDW_BASIC</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Raw payload</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="descriptor-word-extensions">
+<h2>Descriptor Word Extensions<a class="headerlink" href="#descriptor-word-extensions" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_extension.</span></span><span class="sig-name descname"><span class="pre">PdwParamsStuffing</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_extension.html#PdwParamsStuffing"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class for stuffing PDW params</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_extension.</span></span><span class="sig-name descname"><span class="pre">PdwParamsEdge</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_extension.html#PdwParamsEdge"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class for basic edge shaping PDW params</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_type</strong> (<em>int</em>) – Define edge type, 0 = linear, 1 = raised cosine</p></li>
+<li><p><strong>multiplier</strong> (<em>int</em>) – multiplication factor for rise_fall_time, 0 = x1, 1 = x8</p></li>
+<li><p><strong>rise_fall_time</strong> (<em>float</em>) – common rise and fall time in seconds</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_extension.</span></span><span class="sig-name descname"><span class="pre">XdwExtensionUnused</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_extension.html#XdwExtensionUnused"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class for unused PDW extensions</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_extension.</span></span><span class="sig-name descname"><span class="pre">XdwExtensionEdge</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_extension.html#XdwExtensionEdge"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class for edge shaping PDW extension</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_type</strong> (<em>int</em>) – Define edge type, 0 = linear, 1 = raised cosine</p></li>
+<li><p><strong>multiplier</strong> (<em>int</em>) – multiplication factor for rise_fall_time, 0 = x1, 1 = x8</p></li>
+<li><p><strong>rise_time</strong> (<em>float</em>) – rise time in seconds</p></li>
+<li><p><strong>fall_time</strong> (<em>float</em>) – fall time in seconds</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_extension.</span></span><span class="sig-name descname"><span class="pre">XdwExtensionBurst</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_extension.html#XdwExtensionBurst"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class for burst PDW extension</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pri</strong> (<em>float</em>) – pulse repetition interval in seconds</p></li>
+<li><p><strong>add_pulses</strong> (<em>int</em>) – additional pulses</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="control-descriptor-word-cdw">
+<h2>Control Descriptor Word (CDW)<a class="headerlink" href="#control-descriptor-word-cdw" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.ctrl_xdw.</span></span><span class="sig-name descname"><span class="pre">CtrlXdwCmd</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/ctrl_xdw.html#CtrlXdwCmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Enum for control descriptor word command type</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">FREQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">AMPL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">FREQ_AMPL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">ARM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">EOF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.ctrl_xdw.</span></span><span class="sig-name descname"><span class="pre">CtrlXdw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xdw_version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_keys</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/ctrl_xdw.html#CtrlXdw"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Base class for control descriptor words. Only to be used via classes Cdw, TcdwBasic or TcdwExpert.</p>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_xdw_header</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/ctrl_xdw.html#CtrlXdw.create_xdw_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble xCDW header and write to member variable</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_xdw_body</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/ctrl_xdw.html#CtrlXdw.create_xdw_body"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble xCDW body and write to member variable</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_xdw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/rsxdwstreaming/ctrl_xdw.html#CtrlXdw.get_xdw"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Assemble xCDW from header and body</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Raw expert PDW</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Bytes Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="descriptor-word-enums-xdwformat">
+<h2>Descriptor Word Enums (XdwFormat)<a class="headerlink" href="#descriptor-word-enums-xdwformat" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.rsxdwstreaming.xdw_format.</span></span><span class="sig-name descname"><span class="pre">XdwFormat</span></span><a class="reference internal" href="_modules/src/rsxdwstreaming/xdw_format.html#XdwFormat"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Enums to determine xDW Format</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">PDW_BASIC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">PDW_EXPERT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">ADW_BASIC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright © Rohde &amp; Schwarz 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

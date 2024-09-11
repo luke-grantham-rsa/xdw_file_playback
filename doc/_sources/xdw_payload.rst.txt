@@ -1,0 +1,31 @@
+PDW Payload
+___________
+.. autoclass:: src.rsxdwstreaming.xdw_payload.XdwPayloadSegmentArb()
+   :noindex:
+
+   .. automethod:: get_payload(xdw_format)
+      :noindex:
+
+.. autoclass:: src.rsxdwstreaming.xdw_payload.PdwPayloadRtUnmod()
+   :noindex:
+
+   .. automethod:: get_payload(xdw_format)
+      :noindex:
+
+.. autoclass:: src.rsxdwstreaming.xdw_payload.PdwPayloadRtChirpLinear()
+   :noindex:
+
+   .. automethod:: get_payload(xdw_format)
+      :noindex:
+
+.. autoclass:: src.rsxdwstreaming.xdw_payload.PdwPayloadRtChirpTriangular()
+   :noindex:
+
+   .. automethod:: get_payload(xdw_format)
+      :noindex:
+
+.. autoclass:: src.rsxdwstreaming.xdw_payload.PdwPayloadRtBarker()
+   :noindex:
+
+   .. automethod:: get_payload(xdw_format)
+      :noindex:
