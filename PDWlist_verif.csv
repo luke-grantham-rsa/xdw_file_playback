@@ -8,7 +8,7 @@ pdw,0.0464,Barker,0.000025,0,0,0,0.00000357,6,0,0.0001,4,0,0,0,Simple Barker x4
 pdw,0.0469,Linear Chirp,0.000025,1000000,0,0,110,,,0.0001,4,0,0,0,Linear chirp at 1MHz offset x4
 pdw,0.0474,Rectangular,0.000025,1000000,0,0,,,,0.0001,4,0,0,0,Rectangular at 1MHz offset x4
 pdw,0.0479,Tchirp,0.000025,1000000,0,0,100,,,0.0001,4,0,0,0,Tchirp at 1MHz offset x4
-pdw,0.0484,Barker,0.000025,1000000,0,0,0.00000357,6,0,0.0001,4,1,0,0,Barker at 1MHz offset x4 with marker 1
+pdw,0.0484,Barker,0.000025,1000000,0,0,0.00000357,6,0,0.0001,4,0,1,0,Barker at 1MHz offset x4 with external marker 2
 pdw,0.0489,Linear Chirp,0.000025,1000000,10,0,110,,,0.0001,4,0,0,0,Linear chirp at 1MHz offset 10dBm offset x4
 pdw,0.0494,Rectangular,0.000025,1000000,10,0,,,,0.0001,4,0,0,0,Rectangular at 1MHz  offset 10dBm offset x4
 pdw,0.0499,Tchirp,0.000025,1000000,10,0,100,,,0.0001,4,0,0,0,Tchirp at 1MHz offset 10dBm offset x4
@@ -16,12 +16,6 @@ pdw,0.0504,Barker,0.000025,1000000,10,0,0.00000357,6,0,0.0001,4,0,0,0,Barker at 
 pdw,0.0509,Linear Chirp,0.000025,1000000,10,45,110,,,0.0001,4,0,0,0,Linear chirp at 1MHz offset 10dBm 45deg offset x4
 pdw,0.0514,Rectangular,0.000025,1000000,10,45,,,,0.0001,4,0,0,0,Rectangular at 1MHz offset 10dBm 45deg offset x4
 pdw,0.0519,Tchirp,0.000025,1000000,10,45,100,,,0.0001,4,0,0,0,Tchirp at 1MHz offset 10dBm 45deg offset x4
-pdw,0.0524,Barker,0.000025,1000000,10,45,0.00000357,6,0,0.0001,4,0,0,0,Barker at 1MHz offset 10dBm 45deg offset x4
-tcdw,0.0529,EOF,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,:w,,,,,,
+pdw,0.0519,Barker,0.000025,1000000,10,45,0.00000357,6,0,0.0001,3,0,0,0,Barker at 1MHz offset 10dBm 45deg offset x3
+pdw,0.0524,Barker,0.000025,1000000,10,45,0.00000357,6,0,0.0001,1,1,0,0,Barker at 1MHz offset 10dBm 45deg offset x1 with Marker 1
+tcdw,0.0526,EOF,,,,,,,,,,,,,
