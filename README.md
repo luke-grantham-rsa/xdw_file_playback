@@ -1,6 +1,5 @@
 For more detailed information, please open the Python Script SMW200A Instructions.dox
 
-R&S SMW200A CSV TO XDW PYTHON SCRIPT INSTRUCTIONS
 For any issues with this solution, please contact:
     Luke Grantham
     Application Engineer 
