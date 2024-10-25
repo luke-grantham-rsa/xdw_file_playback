@@ -1,21 +1,23 @@
-﻿Type,TOA (s),Mod/Arb/RF,Pulse Width (s)/RF Freq/Level,Frequency Offset (Hz),Level Offset (dBm),Phase Offset (deg),Freq Step/Chip Width (sample),Bkr Code,Stuff,Burst PRI,Number of Pulses,Marker 1,Marker 2,Marker 3,Comment
-tcdw,0,rffreq,4000000000,,,0,,,,,,0,0,0,Set freq
-tcdw,0.01,rflevel,-10,,,0,,,,,,0,0,0,Set level
-pdw,0.02,Linear Chirp,0.000025,0,0,0,440,,,0.0001,256,0,0,0,Simple Linear chirp x256
-pdw,0.0457,Rectangular,0.000025,0,0,0,,,,0.0001,1,0,0,0,Simple Rectangular x1
-pdw,0.0459,Tchirp,0.000025,0,0,0,400,,,0.0001,4,0,0,0,Simple Tchirp x4
-pdw,0.0464,Barker,0.000025,0,0,0,0.00000357,6,0,0.0001,4,0,0,0,Simple Barker x4
-pdw,0.0469,Linear Chirp,0.000025,1000000,0,0,110,,,0.0001,4,0,0,0,Linear chirp at 1MHz offset x4
-pdw,0.0474,Rectangular,0.000025,1000000,0,0,,,,0.0001,4,0,0,0,Rectangular at 1MHz offset x4
-pdw,0.0479,Tchirp,0.000025,1000000,0,0,100,,,0.0001,4,0,0,0,Tchirp at 1MHz offset x4
-pdw,0.0484,Barker,0.000025,1000000,0,0,0.00000357,6,0,0.0001,4,0,1,0,Barker at 1MHz offset x4 with external marker 2
-pdw,0.0489,Linear Chirp,0.000025,1000000,10,0,110,,,0.0001,4,0,0,0,Linear chirp at 1MHz offset 10dBm offset x4
-pdw,0.0494,Rectangular,0.000025,1000000,10,0,,,,0.0001,4,0,0,0,Rectangular at 1MHz  offset 10dBm offset x4
-pdw,0.0499,Tchirp,0.000025,1000000,10,0,100,,,0.0001,4,0,0,0,Tchirp at 1MHz offset 10dBm offset x4
-pdw,0.0504,Barker,0.000025,1000000,10,0,0.00000357,6,0,0.0001,4,0,0,0,Barker at 1MHz offset 10dBm offset x4
-pdw,0.0509,Linear Chirp,0.000025,1000000,10,45,110,,,0.0001,4,0,0,0,Linear chirp at 1MHz offset 10dBm 45deg offset x4
-pdw,0.0514,Rectangular,0.000025,1000000,10,45,,,,0.0001,4,0,0,0,Rectangular at 1MHz offset 10dBm 45deg offset x4
-pdw,0.0519,Tchirp,0.000025,1000000,10,45,100,,,0.0001,4,0,0,0,Tchirp at 1MHz offset 10dBm 45deg offset x4
-pdw,0.0519,Barker,0.000025,1000000,10,45,0.00000357,6,0,0.0001,3,0,0,0,Barker at 1MHz offset 10dBm 45deg offset x3
-pdw,0.0524,Barker,0.000025,1000000,10,45,0.00000357,6,0,0.0001,1,1,0,0,Barker at 1MHz offset 10dBm 45deg offset x1 with Marker 1
-tcdw,0.0526,EOF,,,,,,,,,,,,,
+﻿Type,TOA (s),Path,Mod/Arb/RF,Pulse Width (s)/RF Freq/Level,Frequency Offset (Hz),Level Offset (dBm),Phase Offset (deg),Freq Step/Chip Width (sample),Bkr Code,Stuff,Burst PRI,Number of Pulses,Marker 1,Marker 2,Marker 3,Comment
+tcdw,0,0,rffreq,4000000000,,,0,,,,,,0,0,0,Set freq of Path 0
+tcdw,0.01,0,rflevel,-10,,,0,,,,,,0,0,0,Set level of Path 0
+tcdw,0.02,1,rffreq,6000000000,,,0,,,,,,0,0,0,Set freq of Path 1
+tcdw,0.03,1,rflevel,-20,,,0,,,,,,0,0,0,Set level of Path 1
+pdw,0.04,,Linear Chirp,0.000025,0,0,0,440,,,0.0001,256,0,0,0,Simple Linear chirp x256
+pdw,0.0657,,Rectangular,0.000025,0,0,0,,,,0.0001,1,0,0,0,Simple Rectangular x1
+pdw,0.0659,,Tchirp,0.000025,0,0,0,400,,,0.0001,4,0,0,0,Simple Tchirp x4
+pdw,0.0664,,Barker,0.000025,0,0,0,0.00000357,6,0,0.0001,4,0,0,0,Simple Barker x4
+pdw,0.0669,,Linear Chirp,0.000025,1000000,0,0,110,,,0.0001,4,0,0,0,Linear chirp at 1MHz offset x4
+pdw,0.0674,,Rectangular,0.000025,1000000,0,0,,,,0.0001,4,0,0,0,Rectangular at 1MHz offset x4
+pdw,0.0679,,Tchirp,0.000025,1000000,0,0,100,,,0.0001,4,0,0,0,Tchirp at 1MHz offset x4
+pdw,0.0684,,Barker,0.000025,1000000,0,0,0.00000357,6,0,0.0001,4,0,1,0,Barker at 1MHz offset x4 with external marker 2
+pdw,0.0689,,Linear Chirp,0.000025,1000000,10,0,110,,,0.0001,4,0,0,0,Linear chirp at 1MHz offset 10dBm offset x4
+pdw,0.0694,,Rectangular,0.000025,1000000,10,0,,,,0.0001,4,0,0,0,Rectangular at 1MHz  offset 10dBm offset x4
+pdw,0.0699,,Tchirp,0.000025,1000000,10,0,100,,,0.0001,4,0,0,0,Tchirp at 1MHz offset 10dBm offset x4
+pdw,0.0704,,Barker,0.000025,1000000,10,0,0.00000357,6,0,0.0001,4,0,0,0,Barker at 1MHz offset 10dBm offset x4
+pdw,0.0709,,Linear Chirp,0.000025,1000000,10,45,110,,,0.0001,4,0,0,0,Linear chirp at 1MHz offset 10dBm 45deg offset x4
+pdw,0.0714,,Rectangular,0.000025,1000000,10,45,,,,0.0001,4,0,0,0,Rectangular at 1MHz offset 10dBm 45deg offset x4
+pdw,0.0719,,Tchirp,0.000025,1000000,10,45,100,,,0.0001,4,0,0,0,Tchirp at 1MHz offset 10dBm 45deg offset x4
+pdw,0.0719,,Barker,0.000025,1000000,10,45,0.00000357,6,0,0.0001,3,0,0,0,Barker at 1MHz offset 10dBm 45deg offset x3
+pdw,0.0724,,Barker,0.000025,1000000,10,45,0.00000357,6,0,0.0001,1,1,0,0,Barker at 1MHz offset 10dBm 45deg offset x1 with Marker 1
+tcdw,0.0726,,EOF,,,,,,,,,,,,,

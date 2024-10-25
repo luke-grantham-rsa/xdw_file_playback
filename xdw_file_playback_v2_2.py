@@ -304,16 +304,16 @@ if __name__ == "__main__":
                     file_playback.append_entry(pdw)
             if row[index_containing_substring(header, 'Type')] == "tcdw":
                 if row[index_containing_substring(header, 'RF')] == "rffreq":
-                    print(f"Processing {row[index_containing_substring(header, 'Type')]} to set frequency to {row[index_containing_substring(header, 'RF Freq')]} Hz")
+                    print(f"Processing {row[index_containing_substring(header, 'Type')]} to set frequency to {row[index_containing_substring(header, 'RF Freq')]} Hz on path {row[index_containing_substring(header, 'Path')]}")
                     cdw = ctrl_xdw.TcdwExpert(toa=float(row[index_containing_substring(header, 'TOA')]),
-                                              path=0,
+                                              path=int(row[index_containing_substring(header, 'Path')]),
                                               fval=float(row[index_containing_substring(header, 'RF Freq')]),
                                               cmd=ctrl_xdw.CtrlXdwCmd.FREQ)
                     file_playback.append_entry(cdw)
                 if row[index_containing_substring(header, 'RF')] == "rflevel":
-                    print(f"Processing {row[index_containing_substring(header, 'Type')]} to change level to {row[index_containing_substring(header, 'Level')]} dBm")
+                    print(f"Processing {row[index_containing_substring(header, 'Type')]} to change level to {row[index_containing_substring(header, 'Level')]} dBm on path {row[index_containing_substring(header, 'Path')]}")
                     cdw = ctrl_xdw.TcdwExpert(toa=float(row[index_containing_substring(header, 'TOA')]),
-                                              path=0,
+                                              path=int(row[index_containing_substring(header, 'Path')]),
                                               lval=float(row[index_containing_substring(header, 'Level')]),
                                               cmd=ctrl_xdw.CtrlXdwCmd.AMPL)
                     file_playback.append_entry(cdw)
