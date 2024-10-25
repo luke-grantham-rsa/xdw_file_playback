@@ -16,6 +16,7 @@ Users provide a .csv with Descriptor Words with information describing a pulse. 
 
 
 Release Updates:
+
 V2_2: Release Date: 10/25/2024
   - Added functionality for setting frequency and level for each RF path. Previously, support was for Path 0 only.
       - Please add a column titled "Path" to existing PDW list documents. Path 0 means RF path A and Path 1 means RF Path B.
