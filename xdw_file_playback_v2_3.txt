@@ -1,6 +1,6 @@
 ### Rohde & Schwarz Automation for demonstration use.
 ### Title  : Creates xDW (PDW and TCDW) List, Container Waveform and Address Look-Up files for direct import into SMW200A
-### Date   : 2024/06/06
+### Date   : 2025/02/03
 ### HW Config: SMW200A vector signal generator with FW version 5.30.047.xx or later and
 ### SMW Options:-B9, -B13XT,-K502,-K503,-K525,-K527
 from rsxdwstreaming import xdw, pdw_expert, ctrl_xdw, xdw_payload, xdw_extension
@@ -168,37 +168,6 @@ def index_containing_substring(the_list, substring):
             return i
     return -1
 
-
-"""if __name__ == "__main__":
-    file_playback = XdwFilePlayback('IQ_expert')
-    arb_file1 = 'pulse1.wv'
-    pdw1 = pdw_expert.PdwExpert(toa=0, payload=xdw_payload.XdwPayloadSegmentArb(segment_idx=0))
-    file_playback.append_entry(pdw1, arb_file1)
-
-    pdw2 = pdw_expert.PdwExpert(toa=200e-6, payload=xdw_payload.XdwPayloadSegmentArb(segment_idx=0))
-    file_playback.append_entry(pdw2, arb_file1)
-
-    arb_file2 = 'pulse2.wv'
-    pdw3 = pdw_expert.PdwExpert(toa=400e-6, payload=xdw_payload.XdwPayloadSegmentArb(segment_idx=0))
-    file_playback.append_entry(pdw3, arb_file2)
-
-    pdw4 = pdw_expert.PdwExpert(toa=600e-6, payload=xdw_payload.PdwPayloadRtUnmod(t_on=8e-6))
-    file_playback.append_entry(pdw4)
-
-    cdw1 = ctrl_xdw.TcdwExpert(toa = 1e-3, path=0, fval = 4e9, cmd=ctrl_xdw.CtrlXdwCmd.FREQ)
-    file_playback.append_entry(cdw1)
-#
-    pdw5 = pdw_expert.PdwExpert(toa=5e-3, payload=xdw_payload.XdwPayloadSegmentArb(segment_idx=0))
-    file_playback.append_entry(pdw5, arb_file2)
-#
-    cdw2 = ctrl_xdw.TcdwExpert(toa=10e-3, path=0, fval=5e9, cmd=ctrl_xdw.CtrlXdwCmd.FREQ)
-    file_playback.append_entry(cdw2)
-
-    cdw3 = ctrl_xdw.TcdwExpert(toa=20e-3  - (1 / 2.4e9),  cmd=ctrl_xdw.CtrlXdwCmd.EOF)
-    file_playback.append_entry(cdw3)
-
-    file_playback.generate_files()"""
-
 if __name__ == "__main__":
     print(r"""
  _____   ____  _    _ _____  ______             _____  _____ _    ___          __     _____   ______
@@ -232,7 +201,6 @@ if __name__ == "__main__":
     arb_files = ['pulse1.wv', 'pulse2.wv']
     has_EOF = 0
     file_playback = XdwFilePlayback('IQ_expert')
-    #with open('PDWlist.csv', newline='') as csvfile:
     with open(pdw_list, newline='') as csvfile:
         csvreader = csv.reader(csvfile, delimiter=',', quotechar='|')
         header = next(csvreader)
@@ -316,6 +284,14 @@ if __name__ == "__main__":
                                               path=int(row[index_containing_substring(header, 'Path')]),
                                               lval=float(row[index_containing_substring(header, 'Level')]),
                                               cmd=ctrl_xdw.CtrlXdwCmd.AMPL)
+                    file_playback.append_entry(cdw)
+                if row[index_containing_substring(header, 'RF')] == "rffreqlevel":
+                    print(f"Processing {row[index_containing_substring(header, 'Type')]} to set frequency to {row[index_containing_substring(header, 'RF Freq')]} Hz to change level to {row[index_containing_substring(header, 'Level Offset')]} dBm on path {row[index_containing_substring(header, 'Path')]}")
+                    cdw = ctrl_xdw.TcdwExpert(toa=float(row[index_containing_substring(header, 'TOA')]),
+                                              path=int(row[index_containing_substring(header, 'Path')]),
+                                              fval=float(row[index_containing_substring(header, 'RF Freq')]),
+                                              lval=float(row[index_containing_substring(header, 'Level Offset')]),
+                                              cmd=ctrl_xdw.CtrlXdwCmd.FREQ_AMPL)
                     file_playback.append_entry(cdw)
                 if row[index_containing_substring(header, 'Mod')] == "EOF":
                     print(f"Processing {row[index_containing_substring(header, 'Type')]} for {row[index_containing_substring(header, 'Mod')]}")
