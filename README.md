@@ -27,4 +27,5 @@ Version 2.2: Release Date: 10/25/2024
 
 
 TODO:
+video tutorial
 dynamic arb file names. User input via terminal. 
