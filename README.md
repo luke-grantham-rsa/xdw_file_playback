@@ -17,6 +17,16 @@ Users provide a .csv with Descriptor Words with information describing a pulse. 
 
 Release Updates:
 
+Version 3.0: Release Date: 9/22/26
+  - Added a PyQt6 GUI (xdw_pdw_gui.py) that replaces the command line interface. This enables browsing
+    for a PDW list .csv, preview PDW/TCDW counts and the raw data before generating anything. Enter the
+    output name and comment, and click Generate — no more typing file paths or comments into the terminal.
+  - Added support for multiple ARB waveform segments. The value in the 'Pulse Width' column on
+    'arb' PDW rows now selects which waveform file to use (0, 1, 2, ...). The GUI lets you add,
+    remove, and reorder any number of ARB waveform (.wv) files to match.
+  - Renamed xdw_file_playback_v2_3.py to xdw_file_playback.py. Running it now launches the GUI
+    directly instead of the old input()-driven CLI flow.
+
 Version 2.3: Release Date: 2/12/2024
   - Added rffreqlevel option for TCDWs which allows for frequency and level changes with one TCDW. Thanks Yale!
 
@@ -25,7 +35,6 @@ Version 2.2: Release Date: 10/25/2024
       - Please add a column titled "Path" to existing PDW list documents. Path 0 means RF path A and Path 1 means RF Path B. Only TCDWs require this field as the baseband the file is played on will play out all PDWs. 
       - Please reference the PDWlist_verif.xlsx or .csv for example
 
-
 TODO:
 video tutorial
-dynamic arb file names. User input via terminal. 
+
