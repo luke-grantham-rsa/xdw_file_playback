@@ -14,8 +14,10 @@ import csv
 
 
 class XdwList:
-    def __init__(self, filename: str = 'IQ'):
+    def __init__(self, filename: str = 'IQ', comment: str = '', has_arb_pdw: bool = False):
         self.filename = filename
+        self.comment = comment
+        self.has_arb_pdw = has_arb_pdw
         self.b = bytearray()
         self.b_pdw_raw = bytearray()
 
@@ -30,14 +32,14 @@ class XdwList:
         self.b.extend([0])  # skip segments
 
         wv_name = f'{self.filename}.wv'.encode()
-        if has_arb_pdw:
+        if self.has_arb_pdw:
             self.b.extend(wv_name)
             self.b.extend([0] * (256 - len(wv_name)))
         else:
             self.b.extend([0] * (256))
 
         adr_name = f'{self.filename}.ps_adr'.encode()
-        if has_arb_pdw:
+        if self.has_arb_pdw:
             self.b.extend(adr_name)
             self.b.extend([0] * (256 - len(adr_name)))
         else:
@@ -50,8 +52,7 @@ class XdwList:
         self.b.extend([0] * (64 - len(now_enc)))
 
         # comment
-        #comment_name = 'python generated'.encode()
-        comment_name = input("Please enter comments: ").encode()
+        comment_name = self.comment.encode()[:256]
         self.b.extend(comment_name)
         self.b.extend([0] * (256 - len(comment_name)))
 
@@ -130,9 +131,9 @@ class LookUp:
         self.b.extend(new_address)
 
 class XdwFilePlayback:
-    def __init__(self, filename: str = ''):
+    def __init__(self, filename: str = '', comment: str = '', has_arb_pdw: bool = False):
         self.filename = filename
-        self.xdw_list = XdwList(filename)
+        self.xdw_list = XdwList(filename, comment=comment, has_arb_pdw=has_arb_pdw)
         self.container_wv = ContainerWv(filename)
         self.look_up = LookUp(filename)
 
@@ -168,48 +169,42 @@ def index_containing_substring(the_list, substring):
             return i
     return -1
 
-if __name__ == "__main__":
-    print(r"""
- _____   ____  _    _ _____  ______             _____  _____ _    ___          __     _____   ______
- |  __ \ / __ \| |  | |  __ \|  ____|   ___     / ____|/ ____| |  | \ \        / /\   |  __ \ |___  /
- | |__) | |  | | |__| | |  | | |__     ( _ )   | (___ | |    | |__| |\ \  /\  / /  \  | |__) |   / / 
- |  _  /| |  | |  __  | |  | |  __|    / _ \/\  \___ \| |    |  __  | \ \/  \/ / /\ \ |  _  /   / /  
- | | \ \| |__| | |  | | |__| | |____  | (_>  <  ____) | |____| |  | |  \  /\  / ____ \| | \ \  / /__ 
- |_|  \_\\____/|_|  |_|_____/|______|  \___/\/ |_____/ \_____|_|  |_|   \/  \/_/    \_\_|  \_\/_____|
- 
-               \_/ |  \ |  |    /__`  |  |__) |__   /\   |\/| | |\ | / _` 
-               / \ |__/ |/\|    .__/  |  |  \ |___ /~~\  |  | | | \| \__> 
-                                                                                                      
-                    """)
+def build_xdw_files(pdw_list: str, output_basename: str, comment: str = '', arb_waveform_files=('pulse1.wv', 'pulse2.wv'), log=print):
+    """Parses a PDW/TCDW list .csv file and generates the xDW (.ps_def), Container
+    Waveform (.wv), and Address Look-Up (.ps_adr) files for direct import into SMW200A.
 
+    For 'arb' PDWs, the value in the 'Pulse Width' column selects which entry of
+    arb_waveform_files to use as that pulse's waveform segment (0 -> arb_waveform_files[0], etc).
 
-    print('Welcome to the Rohde & Schwarz XDW Streaming CSV Conversion Tool.')
-    print('This Tool creates xDW (PDW and TCDW) List, Container Waveform, and Address Look-Up files for direct import into SMW200A.')
-    pdw_list = input("Please enter your PDW List .csv file: ")
-    has_arb_pdw = 0
+    Returns the XdwFilePlayback instance used to generate the files.
+    """
+    has_arb_pdw = False
     with open(pdw_list, newline='') as csvfile: #scan file for arb PDWs.
         csvreader = csv.reader(csvfile, delimiter=',', quotechar='|')
         header = next(csvreader)
         for row in csvreader:
             if row[index_containing_substring(header, 'Type')] == 'pdw':
                 if row[index_containing_substring(header, 'Mod')] == 'arb':
-                    has_arb_pdw = 1
+                    has_arb_pdw = True
                     break
 
-
-
-    arb_files = ['pulse1.wv', 'pulse2.wv']
     has_EOF = 0
-    file_playback = XdwFilePlayback('IQ_expert')
+    file_playback = XdwFilePlayback(output_basename, comment=comment, has_arb_pdw=has_arb_pdw)
     with open(pdw_list, newline='') as csvfile:
         csvreader = csv.reader(csvfile, delimiter=',', quotechar='|')
         header = next(csvreader)
         for row in csvreader:
             if row[index_containing_substring(header, 'Type')] == 'pdw':
-                print(f"Processing {row[index_containing_substring(header, 'Type')]} with {row[index_containing_substring(header, 'Mod')]} waveform with {row[index_containing_substring(header, 'Number of Pulses')]} pulse(s).")
+                log(f"Processing {row[index_containing_substring(header, 'Type')]} with {row[index_containing_substring(header, 'Mod')]} waveform with {row[index_containing_substring(header, 'Number of Pulses')]} pulse(s).")
                 if int(row[index_containing_substring(header, 'Number of Pulses')]) == 0:
                     continue
                 if row[index_containing_substring(header, 'Mod')] == 'arb':
+                    segment_idx = int(float(row[index_containing_substring(header, 'Pulse Width')]))
+                    if not (0 <= segment_idx < len(arb_waveform_files)):
+                        raise ValueError(
+                            f"PDW at TOA={row[index_containing_substring(header, 'TOA')]} references ARB waveform "
+                            f"segment index {segment_idx}, but only {len(arb_waveform_files)} ARB waveform file(s) were provided."
+                        )
                     pdw = pdw_expert.PdwExpert(toa=float(row[index_containing_substring(header,'TOA')]),
                                                payload=xdw_payload.XdwPayloadSegmentArb(segment_idx=0),
                                                extension3=xdw_extension.XdwExtensionBurst(pri=float(row[index_containing_substring(header, 'Burst PRI')]),
@@ -217,7 +212,7 @@ if __name__ == "__main__":
                                                m1=float(row[index_containing_substring(header, 'Marker 1')]),
                                                m2=float(row[index_containing_substring(header, 'Marker 2')]),
                                                m3=float(row[index_containing_substring(header, 'Marker 3')]))
-                    file_playback.append_entry(pdw,arb_files[0])
+                    file_playback.append_entry(pdw, arb_waveform_files[segment_idx])
                 if row[index_containing_substring(header, 'Mod')] == "Rectangular":
                     pdw = pdw_expert.PdwExpert(toa=float(row[index_containing_substring(header, 'TOA')]),
                                                payload=xdw_payload.PdwPayloadRtUnmod(t_on=float(row[index_containing_substring(header,'Pulse Width')])),
@@ -272,21 +267,21 @@ if __name__ == "__main__":
                     file_playback.append_entry(pdw)
             if row[index_containing_substring(header, 'Type')] == "tcdw":
                 if row[index_containing_substring(header, 'RF')] == "rffreq":
-                    print(f"Processing {row[index_containing_substring(header, 'Type')]} to set frequency to {row[index_containing_substring(header, 'RF Freq')]} Hz on path {row[index_containing_substring(header, 'Path')]}")
+                    log(f"Processing {row[index_containing_substring(header, 'Type')]} to set frequency to {row[index_containing_substring(header, 'RF Freq')]} Hz on path {row[index_containing_substring(header, 'Path')]}")
                     cdw = ctrl_xdw.TcdwExpert(toa=float(row[index_containing_substring(header, 'TOA')]),
                                               path=int(row[index_containing_substring(header, 'Path')]),
                                               fval=float(row[index_containing_substring(header, 'RF Freq')]),
                                               cmd=ctrl_xdw.CtrlXdwCmd.FREQ)
                     file_playback.append_entry(cdw)
                 if row[index_containing_substring(header, 'RF')] == "rflevel":
-                    print(f"Processing {row[index_containing_substring(header, 'Type')]} to change level to {row[index_containing_substring(header, 'Level')]} dBm on path {row[index_containing_substring(header, 'Path')]}")
+                    log(f"Processing {row[index_containing_substring(header, 'Type')]} to change level to {row[index_containing_substring(header, 'Level')]} dBm on path {row[index_containing_substring(header, 'Path')]}")
                     cdw = ctrl_xdw.TcdwExpert(toa=float(row[index_containing_substring(header, 'TOA')]),
                                               path=int(row[index_containing_substring(header, 'Path')]),
                                               lval=float(row[index_containing_substring(header, 'Level')]),
                                               cmd=ctrl_xdw.CtrlXdwCmd.AMPL)
                     file_playback.append_entry(cdw)
                 if row[index_containing_substring(header, 'RF')] == "rffreqlevel":
-                    print(f"Processing {row[index_containing_substring(header, 'Type')]} to set frequency to {row[index_containing_substring(header, 'RF Freq')]} Hz to change level to {row[index_containing_substring(header, 'Level Offset')]} dBm on path {row[index_containing_substring(header, 'Path')]}")
+                    log(f"Processing {row[index_containing_substring(header, 'Type')]} to set frequency to {row[index_containing_substring(header, 'RF Freq')]} Hz to change level to {row[index_containing_substring(header, 'Level Offset')]} dBm on path {row[index_containing_substring(header, 'Path')]}")
                     cdw = ctrl_xdw.TcdwExpert(toa=float(row[index_containing_substring(header, 'TOA')]),
                                               path=int(row[index_containing_substring(header, 'Path')]),
                                               fval=float(row[index_containing_substring(header, 'RF Freq')]),
@@ -294,16 +289,22 @@ if __name__ == "__main__":
                                               cmd=ctrl_xdw.CtrlXdwCmd.FREQ_AMPL)
                     file_playback.append_entry(cdw)
                 if row[index_containing_substring(header, 'Mod')] == "EOF":
-                    print(f"Processing {row[index_containing_substring(header, 'Type')]} for {row[index_containing_substring(header, 'Mod')]}")
+                    log(f"Processing {row[index_containing_substring(header, 'Type')]} for {row[index_containing_substring(header, 'Mod')]}")
                     cdw = ctrl_xdw.TcdwExpert(toa=20e-3  - (1 / 2.4e9),
                                               cmd=ctrl_xdw.CtrlXdwCmd.EOF)
                     file_playback.append_entry(cdw)
                     has_EOF = 1
 
     if has_EOF == 0:  #if no EOF at the end of the PDW list, append one.
-        print(f"Appending EOF TCDW")
+        log(f"Appending EOF TCDW")
         cdw = ctrl_xdw.TcdwExpert(toa=20e-3 - (1 / 2.4e9),
                                   cmd=ctrl_xdw.CtrlXdwCmd.EOF)
         file_playback.append_entry(cdw)
     file_playback.generate_files()
-    print(f'--------Successfully generated files-----------')
+    log('--------Successfully generated files-----------')
+    return file_playback
+
+
+if __name__ == "__main__":
+    from xdw_pdw_gui import main as launch_gui
+    launch_gui()

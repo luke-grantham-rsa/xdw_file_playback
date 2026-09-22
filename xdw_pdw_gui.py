@@ -26,7 +26,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from xdw_file_playback_v2_3 import build_xdw_files
+from xdw_file_playback import build_xdw_files
 
 MAX_PREVIEW_ROWS = 500
 
