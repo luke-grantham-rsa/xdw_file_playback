@@ -80,6 +80,7 @@ class ContainerWv:
         self.iqdata = []
         self.num_elements = 0
         self.sampling_rate = 0
+        self.segment_durations = {}  # segment name -> duration in seconds, before zero padding
 
     def append_wv(self, new_iq, segment_name):
         self.iqdata.extend(new_iq)
@@ -141,6 +142,7 @@ class XdwFilePlayback:
         if arb_segment and (new_xdw.payload.__class__ == xdw_payload.XdwPayloadSegmentArb):
             if arb_segment not in self.container_wv.filename_list:
                 new_iq, self.container_wv.sampling_rate = iqdata.ReadWv(arb_segment)
+                self.container_wv.segment_durations[arb_segment] = len(new_iq) / self.container_wv.sampling_rate
                 if len(new_iq) % 8: # this zero padding is to assure that the stop address fulfills the condition (n*256) - 1
                     pad_bits = 8 - (len(new_iq)%8)
                     new_iq.extend(pad_bits * [0+0j])
@@ -149,8 +151,7 @@ class XdwFilePlayback:
                     pad_bits = 128 - (len(new_iq)%128)
                     new_iq.extend(pad_bits * [0+0j])
                 self.container_wv.append_wv(new_iq, arb_segment)
-            idx = self.container_wv.num_elements - 1 # TODO: return correct index
-            new_xdw.payload.segment_idx = idx
+            new_xdw.payload.segment_idx = self.container_wv.filename_list.index(arb_segment)
         self.xdw_list.append_xdw(new_xdw)
 
 
@@ -189,6 +190,7 @@ def build_xdw_files(pdw_list: str, output_basename: str, comment: str = '', arb_
                     break
 
     has_EOF = 0
+    last_end = 0.0  # end time of the latest pulse/burst/TCDW, used for EOF placement and checks
     file_playback = XdwFilePlayback(output_basename, comment=comment, has_arb_pdw=has_arb_pdw)
     with open(pdw_list, newline='') as csvfile:
         csvreader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -265,6 +267,13 @@ def build_xdw_files(pdw_list: str, output_basename: str, comment: str = '', arb_
                                                m2=float(row[index_containing_substring(header, 'Marker 2')]),
                                                m3=float(row[index_containing_substring(header, 'Marker 3')]))
                     file_playback.append_entry(pdw)
+                if row[index_containing_substring(header, 'Mod')] == 'arb':
+                    width = file_playback.container_wv.segment_durations[arb_waveform_files[segment_idx]]
+                else:
+                    width = float(row[index_containing_substring(header, 'Pulse Width')])
+                last_end = max(last_end, float(row[index_containing_substring(header, 'TOA')])
+                               + (int(row[index_containing_substring(header, 'Number of Pulses')]) - 1)
+                               * float(row[index_containing_substring(header, 'Burst PRI')]) + width)
             if row[index_containing_substring(header, 'Type')] == "tcdw":
                 if row[index_containing_substring(header, 'RF')] == "rffreq":
                     log(f"Processing {row[index_containing_substring(header, 'Type')]} to set frequency to {row[index_containing_substring(header, 'RF Freq')]} Hz on path {row[index_containing_substring(header, 'Path')]}")
@@ -289,15 +298,20 @@ def build_xdw_files(pdw_list: str, output_basename: str, comment: str = '', arb_
                                               cmd=ctrl_xdw.CtrlXdwCmd.FREQ_AMPL)
                     file_playback.append_entry(cdw)
                 if row[index_containing_substring(header, 'Mod')] == "EOF":
-                    log(f"Processing {row[index_containing_substring(header, 'Type')]} for {row[index_containing_substring(header, 'Mod')]}")
-                    cdw = ctrl_xdw.TcdwExpert(toa=20e-3  - (1 / 2.4e9),
+                    eof_toa = float(row[index_containing_substring(header, 'TOA')])
+                    log(f"Processing {row[index_containing_substring(header, 'Type')]} for {row[index_containing_substring(header, 'Mod')]} at {eof_toa} s")
+                    if eof_toa < last_end:
+                        log(f"WARNING: EOF TOA {eof_toa} s is before the last descriptor word ends ({last_end} s); playback will be cut short.")
+                    cdw = ctrl_xdw.TcdwExpert(toa=eof_toa - (1 / 2.4e9),
                                               cmd=ctrl_xdw.CtrlXdwCmd.EOF)
                     file_playback.append_entry(cdw)
                     has_EOF = 1
+                else:
+                    last_end = max(last_end, float(row[index_containing_substring(header, 'TOA')]))
 
     if has_EOF == 0:  #if no EOF at the end of the PDW list, append one.
-        log(f"Appending EOF TCDW")
-        cdw = ctrl_xdw.TcdwExpert(toa=20e-3 - (1 / 2.4e9),
+        log(f"Appending EOF TCDW at {last_end} s (end of last descriptor word)")
+        cdw = ctrl_xdw.TcdwExpert(toa=last_end,
                                   cmd=ctrl_xdw.CtrlXdwCmd.EOF)
         file_playback.append_entry(cdw)
     file_playback.generate_files()
