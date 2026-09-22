@@ -26,6 +26,8 @@ Version 3.0: Release Date: 9/22/26
     remove, and reorder any number of ARB waveform (.wv) files to match.
   - Renamed xdw_file_playback_v2_3.py to xdw_file_playback.py. Running it now launches the GUI
     directly instead of the old input()-driven CLI flow.
+  - Fixed bug where EOF was not placed at the end of the file which was gating automatic replay of the file.
+    The instrument now loops without need for external triggering/marker
 
 Version 2.3: Release Date: 2/12/2024
   - Added rffreqlevel option for TCDWs which allows for frequency and level changes with one TCDW. Thanks Yale!
