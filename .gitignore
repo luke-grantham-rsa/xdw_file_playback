@@ -1,0 +1,8 @@
+# Python bytecode
+__pycache__/
+*.pyc
+
+# xDW files generated from the example PDW lists
+PDWlist*.ps_def
+PDWlist*.ps_adr
+PDWlist*.wv
