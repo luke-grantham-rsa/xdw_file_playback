@@ -1,4 +1,4 @@
-For more detailed information, please open the Python Script SMW200A Instructions.dox
+For more detailed information, please open the Python Script SMW200A Instructions.docx
 
 For any issues with this solution, please contact
 
@@ -12,10 +12,30 @@ This script was created to convert .csv formatted Pulse Descriptor Word (PDWs) a
 Descriptor Words are simple, readable structures that describe a pulse. R&S Pulse Descriptor Words (PDW) can be used to generate pulsed signals in real-time or replay pre-calculated waveform segments. R&S Timed Control Descriptor Words (TCDW) can be used to change instrument RF frequency and/or level or re-arm the Extended Sequencer.
 
 Users provide a .csv with Descriptor Words with information describing a pulse. The script processes the .csv and generates the necessary files to output the pulses on the Rohde & Schwarz SMW200A Vector Signal Generator.
+The GUI can then transfer the files to the SMW200A over LAN and play them, on a single baseband or on multiple
+sequencers in Extended Sequencer Advanced mode.
 
 
 
 Release Updates:
+
+Version 3.1: Release Date: 9/24/26
+  - Added an 'SMW Playback' tab that transfers the generated .ps_def, .ps_adr and .wv files to the SMW200A
+    over LAN (SCPI on port 5025, default folder /var/user) and plays them with the Extended Sequencer in
+    'Playback from File' mode — no more FTP copy or manual Extended Sequencer setup. Choose the trigger
+    mode/source, optionally preset the instrument and turn RF on, then Transfer & Play, Execute Trigger or Stop.
+  - Added a 'Multi-Sequencer' tab for Extended Sequencer Advanced mode. Load a different scenario onto each
+    sequencer (S1-S6, as many as the instrument supports), set per-sequencer stream, frequency offset,
+    attenuation and trigger delay, route streams to RF A/RF B, then Play All to start every sequencer together.
+    The tab switches System Config > Fading/Baseband Config > Mode to Extended Sequencer Advanced
+    automatically. Playback uses trigger mode Armed Auto (the only mode supported for Playback from File in
+    advanced mode); with the internal trigger source, Play All fires the trigger so all sequencers start at once.
+  - Both instrument tabs share one connection and fill in the last generated .ps_def automatically.
+    Instrument control lives in smw_control.py and smw_playback_tabs.py.
+  - Fixed bug where the .ps_def stored the full local path of the .wv and .ps_adr files, so the instrument
+    could not find them when an absolute output path was used. Only the file names are stored now.
+  - Added PDWlist_RF_B.csv, an example PDW list with its TCDW on path 1 (RF B) for multi-sequencer use.
+  - Requires the R&S SMW-K503/-K504 options on the SMW200A (checked on connect).
 
 Version 3.0: Release Date: 9/22/26
   - Added a PyQt6 GUI (xdw_pdw_gui.py) that replaces the command line interface. This enables browsing
