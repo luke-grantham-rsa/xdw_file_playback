@@ -2,17 +2,14 @@
 ### Title  : PyQt6 GUI to load a PDW List .csv file, preview its contents, and generate the
 ###           xDW (.ps_def), Container Waveform (.wv), and Address Look-Up (.ps_adr) files.
 ###           Replaces the input()-driven command line flow in xdw_file_playback_v2_3.py.
-###           The 'SMW Playback' tab transfers the generated files to an SMW200A and plays
-###           them with the Extended Sequencer.
+###           The 'SMW Playback' and 'Multi-Sequencer' tabs (smw_playback_tabs.py) transfer the
+###           generated files to an SMW200A and play them with the Extended Sequencer.
 import csv
 import os
 import sys
 
-from PyQt6.QtCore import QThread, pyqtSignal
 from PyQt6.QtWidgets import (
     QApplication,
-    QCheckBox,
-    QComboBox,
     QFileDialog,
     QFormLayout,
     QGroupBox,
@@ -32,11 +29,10 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from smw_control import DEFAULT_REMOTE_DIR, TRIGGER_MODES, TRIGGER_SOURCES, SmwInstrument, files_for_basename
+from smw_playback_tabs import InstrumentSession, MultiSequencerTab, SmwPlaybackTab
 from xdw_file_playback import build_xdw_files
 
 MAX_PREVIEW_ROWS = 500
-DEFAULT_SMW_ADDRESS = "192.168.1.11"
 
 
 def index_containing_substring(the_list, substring):
@@ -59,8 +55,11 @@ class PdwCsvPreviewWindow(QMainWindow):
         self.setCentralWidget(tabs)
         central = QWidget()
         tabs.addTab(central, "Generate xDW Files")
-        self.playback_tab = SmwPlaybackTab()
+        self.session = InstrumentSession()
+        self.playback_tab = SmwPlaybackTab(self.session)
         tabs.addTab(self.playback_tab, "SMW Playback")
+        self.multi_sequencer_tab = MultiSequencerTab(self.session)
+        tabs.addTab(self.multi_sequencer_tab, "Multi-Sequencer")
         layout = QVBoxLayout(central)
 
         file_row = QHBoxLayout()
@@ -324,11 +323,13 @@ class PdwCsvPreviewWindow(QMainWindow):
             self.append_log(f"ERROR: {exc}")
             QMessageBox.critical(self, "Generation Failed", f"Could not generate xDW files:\n{exc}")
         else:
-            self.playback_tab.set_ps_def(os.path.abspath(f'{output_basename}.ps_def'))
+            ps_def = os.path.abspath(f'{output_basename}.ps_def')
+            self.playback_tab.set_ps_def(ps_def)
+            self.multi_sequencer_tab.set_ps_def(ps_def)
             QMessageBox.information(
                 self, "Success",
                 f"Successfully generated files for '{output_basename}'.\n"
-                f"Use the 'SMW Playback' tab to load them onto the instrument."
+                f"Use the 'SMW Playback' or 'Multi-Sequencer' tab to load them onto the instrument."
             )
         finally:
             self.b_generate.setEnabled(True)
@@ -336,228 +337,6 @@ class PdwCsvPreviewWindow(QMainWindow):
     def append_log(self, message):
         self.log_view.appendPlainText(str(message))
         QApplication.processEvents()
-
-
-class InstrumentWorker(QThread):
-    """Runs one instrument operation off the GUI thread so long uploads don't freeze the window."""
-    log = pyqtSignal(str)
-    failed = pyqtSignal(str)
-
-    def __init__(self, operation):
-        super().__init__()
-        self.operation = operation
-
-    def run(self):
-        try:
-            self.operation(self.log.emit)
-        except Exception as exc:
-            self.failed.emit(str(exc))
-
-
-class SmwPlaybackTab(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.smw = None
-        self.worker = None
-
-        layout = QVBoxLayout(self)
-
-        connection_box = QGroupBox("Instrument")
-        connection_layout = QFormLayout()
-        address_row = QHBoxLayout()
-        self.le_address = QLineEdit(DEFAULT_SMW_ADDRESS)
-        self.b_connect = QPushButton("Connect")
-        self.b_connect.clicked.connect(self.toggle_connection)
-        address_row.addWidget(self.le_address)
-        address_row.addWidget(self.b_connect)
-        connection_layout.addRow("IP address:", address_row)
-        self.l_idn = QLabel("Not connected")
-        self.l_idn.setStyleSheet("color: gray;")
-        connection_layout.addRow("Status:", self.l_idn)
-        connection_box.setLayout(connection_layout)
-        layout.addWidget(connection_box)
-
-        files_box = QGroupBox("Files")
-        files_layout = QFormLayout()
-        ps_def_row = QHBoxLayout()
-        self.le_ps_def = QLineEdit()
-        self.le_ps_def.setPlaceholderText("Generated .ps_def file (filled in automatically after Generate)")
-        self.le_ps_def.textChanged.connect(self.refresh_file_list)
-        self.b_ps_def_browse = QPushButton("Browse...")
-        self.b_ps_def_browse.clicked.connect(self.browse_ps_def)
-        ps_def_row.addWidget(self.le_ps_def)
-        ps_def_row.addWidget(self.b_ps_def_browse)
-        files_layout.addRow("Definition file:", ps_def_row)
-        self.l_files = QLabel("-")
-        files_layout.addRow("Files to transfer:", self.l_files)
-        self.le_remote_dir = QLineEdit(DEFAULT_REMOTE_DIR)
-        files_layout.addRow("Instrument folder:", self.le_remote_dir)
-        files_box.setLayout(files_layout)
-        layout.addWidget(files_box)
-
-        playback_box = QGroupBox("Extended Sequencer Playback")
-        playback_layout = QFormLayout()
-        self.cb_trigger_mode = QComboBox()
-        self.cb_trigger_mode.addItems(TRIGGER_MODES.keys())
-        playback_layout.addRow("Trigger mode:", self.cb_trigger_mode)
-        self.cb_trigger_source = QComboBox()
-        self.cb_trigger_source.addItems(TRIGGER_SOURCES.keys())
-        playback_layout.addRow("Trigger source:", self.cb_trigger_source)
-        self.chk_preset = QCheckBox("Preset instrument before playback")
-        self.chk_preset.setChecked(True)
-        playback_layout.addRow(self.chk_preset)
-        self.chk_rf_on = QCheckBox("Turn RF on")
-        self.chk_rf_on.setChecked(True)
-        playback_layout.addRow(self.chk_rf_on)
-        playback_box.setLayout(playback_layout)
-        layout.addWidget(playback_box)
-
-        actions_row = QHBoxLayout()
-        self.b_transfer_play = QPushButton("Transfer && Play")
-        self.b_transfer_play.clicked.connect(lambda: self.start_playback(transfer=True))
-        self.b_transfer = QPushButton("Transfer Only")
-        self.b_transfer.clicked.connect(self.transfer_only)
-        self.b_play = QPushButton("Play")
-        self.b_play.clicked.connect(lambda: self.start_playback(transfer=False))
-        self.b_trigger = QPushButton("Execute Trigger")
-        self.b_trigger.clicked.connect(lambda: self.run_operation(lambda log: self.smw.execute_trigger()))
-        self.b_stop = QPushButton("Stop")
-        self.b_stop.clicked.connect(self.stop_playback)
-        for b in (self.b_transfer_play, self.b_transfer, self.b_play, self.b_trigger, self.b_stop):
-            actions_row.addWidget(b)
-        layout.addLayout(actions_row)
-        self.action_buttons = (self.b_transfer_play, self.b_transfer, self.b_play, self.b_trigger, self.b_stop)
-
-        layout.addWidget(QLabel("Log:"))
-        self.log_view = QPlainTextEdit()
-        self.log_view.setReadOnly(True)
-        self.log_view.setMaximumBlockCount(2000)
-        layout.addWidget(self.log_view, stretch=1)
-
-        self.update_controls()
-
-    def set_ps_def(self, path):
-        self.le_ps_def.setText(path)
-
-    def browse_ps_def(self):
-        path, _ = QFileDialog.getOpenFileName(
-            self, "Select Definition File", self.le_ps_def.text(), "PDW Definition Files (*.ps_def);;All Files (*)"
-        )
-        if path:
-            self.set_ps_def(path)
-
-    def refresh_file_list(self):
-        files = files_for_basename(self.le_ps_def.text().strip())
-        self.l_files.setText(", ".join(os.path.basename(f) for f in files) if files else "-")
-
-    def update_controls(self):
-        busy = self.worker is not None
-        connected = self.smw is not None
-        self.b_connect.setText("Disconnect" if connected else "Connect")
-        self.b_connect.setEnabled(not busy)
-        self.le_address.setEnabled(not connected and not busy)
-        for b in self.action_buttons:
-            b.setEnabled(connected and not busy)
-
-    def append_log(self, message):
-        self.log_view.appendPlainText(str(message))
-
-    def run_operation(self, operation, on_success=None):
-        """Runs operation(log) on a worker thread; on_success is called on the GUI thread."""
-        self.worker = InstrumentWorker(operation)
-        self.worker.log.connect(self.append_log)
-        self.worker.failed.connect(self.operation_failed)
-        succeeded = []
-        self.worker.failed.connect(lambda _msg: succeeded.append(False))
-
-        def finished():
-            self.worker = None
-            if on_success and not succeeded:
-                on_success()
-            self.update_controls()
-
-        self.worker.finished.connect(finished)
-        self.update_controls()
-        self.worker.start()
-
-    def operation_failed(self, message):
-        self.append_log(f"ERROR: {message}")
-        QMessageBox.critical(self, "Instrument Error", message)
-
-    def toggle_connection(self):
-        if self.smw:
-            self.smw.close()
-            self.smw = None
-            self.l_idn.setText("Not connected")
-            self.append_log("Disconnected")
-            self.update_controls()
-            return
-
-        smw = SmwInstrument(self.le_address.text().strip())
-        idn = []
-
-        def connect(log):
-            log(f"Connecting to {smw.host}...")
-            idn.append(smw.connect())
-            log(idn[0])
-            missing = {'SMW-K503', 'SMW-K504'} - smw.options()
-            if missing:
-                log(f"WARNING: instrument is missing option(s) {', '.join(sorted(missing))} required for xDW playback")
-
-        def connected():
-            self.smw = smw
-            self.l_idn.setText(idn[0])
-
-        self.run_operation(connect, on_success=connected)
-
-    def selected_files(self):
-        ps_def = self.le_ps_def.text().strip()
-        if not os.path.isfile(ps_def):
-            QMessageBox.warning(self, "Missing Definition File", "Please select a generated .ps_def file.")
-            return None
-        return files_for_basename(ps_def)
-
-    def transfer(self, files, log):
-        remote_dir = self.le_remote_dir.text().strip()
-        for path in files:
-            log(f"Transferring {os.path.basename(path)} ({os.path.getsize(path):,} bytes) to {remote_dir}")
-            self.smw.upload_file(path, remote_dir)
-        return f"{remote_dir.rstrip('/')}/{os.path.basename(files[0])}"
-
-    def transfer_only(self):
-        files = self.selected_files()
-        if files:
-            self.run_operation(lambda log: (self.transfer(files, log), log("Transfer complete")))
-
-    def start_playback(self, transfer):
-        files = self.selected_files()
-        if not files:
-            return
-        trigger_mode = TRIGGER_MODES[self.cb_trigger_mode.currentText()]
-        trigger_source = TRIGGER_SOURCES[self.cb_trigger_source.currentText()]
-        preset = self.chk_preset.isChecked()
-        rf_on = self.chk_rf_on.isChecked()
-        remote_ps_def = f"{self.le_remote_dir.text().strip().rstrip('/')}/{os.path.basename(files[0])}"
-
-        def play(log):
-            ps_def = self.transfer(files, log) if transfer else remote_ps_def
-            self.smw.play_file(ps_def, trigger_mode, trigger_source, preset=preset, rf_on=rf_on, log=log)
-            if trigger_mode in ('AAUT', 'ARET', 'SING'):
-                log("Playback armed - press 'Execute Trigger' to start")
-            else:
-                log("Playback running")
-
-        self.run_operation(play)
-
-    def stop_playback(self):
-        def stop(log):
-            self.smw.stop()
-            log("Extended Sequencer: OFF")
-            if self.chk_rf_on.isChecked():
-                self.smw.set_rf(False)
-                log("RF: OFF")
-
-        self.run_operation(stop)
 
 
 def main():
