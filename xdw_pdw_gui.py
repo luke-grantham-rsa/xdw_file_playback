@@ -47,7 +47,7 @@ class PdwCsvPreviewWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("R&S SMW200A xDW File Generation & Playback")
-        self.resize(733, 600)
+        self.resize(1000, 900)
 
         self.has_arb_pdw = False
 
