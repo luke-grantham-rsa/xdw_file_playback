@@ -10,6 +10,7 @@ import numpy as np
 from enum import Enum
 from create_pulse import WriteWv
 import csv
+import os
 
 
 
@@ -31,14 +32,15 @@ class XdwList:
         self.b.extend([0])  # version & sysclock
         self.b.extend([0])  # skip segments
 
-        wv_name = f'{self.filename}.wv'.encode()
+        # the instrument resolves these relative to the .ps_def's folder, so store only the file names
+        wv_name = f'{os.path.basename(self.filename)}.wv'.encode()
         if self.has_arb_pdw:
             self.b.extend(wv_name)
             self.b.extend([0] * (256 - len(wv_name)))
         else:
             self.b.extend([0] * (256))
 
-        adr_name = f'{self.filename}.ps_adr'.encode()
+        adr_name = f'{os.path.basename(self.filename)}.ps_adr'.encode()
         if self.has_arb_pdw:
             self.b.extend(adr_name)
             self.b.extend([0] * (256 - len(adr_name)))
