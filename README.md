@@ -17,6 +17,33 @@ sequencers in Extended Sequencer Advanced mode.
 
 
 
+Building a standalone .exe:
+
+The GUI can be packaged into a single xdw_pdw_gui.exe with PyInstaller, so it can be shared with users who do
+not have Python installed. Run these commands from the repository folder in PowerShell.
+
+  1. Create a Python 3.12 virtual environment and activate it:
+       python -m venv .venv
+       .venv\Scripts\activate
+     If the standard Python installer is blocked on your PC, uv (https://docs.astral.sh/uv/) can install
+     Python without it:
+       uv venv .venv --python 3.12 --seed
+  2. Install the dependencies. The rsxdwstreaming wheel is included in this repository:
+       pip install .\rsxdwstreaming-2.0.0-py2.py3-none-any.whl rskfd==0.5.2 numpy==1.26.3 PyQt6 pyinstaller
+  3. Build the executable:
+       python build_exe.py
+     The build takes a few minutes and writes dist\xdw_pdw_gui.exe. The build\ and dist\ folders are not
+     committed to git.
+
+  Notes:
+  - Copy dist\xdw_pdw_gui.exe anywhere to run it. Each launch takes several seconds while it unpacks itself.
+  - Some antivirus software flags single-file PyInstaller builds. If that happens, remove '--onefile' in
+    build_exe.py to build a dist\xdw_pdw_gui\ folder instead and share the whole folder.
+  - If the .exe shows "Unhandled exception in script ... No module named ...", that module is imported at
+    runtime and PyInstaller missed it. Add '--collect-submodules', '<package>' to build_exe.py and rebuild.
+
+
+
 Release Updates:
 
 Version 3.1: Release Date: 9/24/26

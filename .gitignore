@@ -2,6 +2,10 @@
 __pycache__/
 *.pyc
 
+# PyInstaller output from build_exe.py
+build/
+dist/
+
 # xDW files generated from the example PDW lists
 PDWlist*.ps_def
 PDWlist*.ps_adr
