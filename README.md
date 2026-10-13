@@ -47,6 +47,22 @@ not have Python installed. Run these commands from the repository folder in Powe
 
 Release Updates:
 
+Version 3.2: Release Date: 10/13/26
+  - ARB PDWs now apply the 'Frequency Offset', 'Level Offset' and 'Phase Offset' columns. Previously these
+    were read for every other pulse type but ignored for 'arb' rows, so every ARB burst played at the
+    center frequency with no level or phase offset. ARB rows must now have a value in all three columns
+    (use 0 for no offset). The offset plus half the waveform bandwidth must fit within the baseband
+    bandwidth of the SMW path. Files generated with earlier versions used zero offsets for ARB PDWs.
+  - The Output base name now updates to match the PDW list each time a new .csv is selected. Previously
+    it was only filled in the first time, so later lists kept the name of the first one.
+  - Fixed bug where Tchirp and Barker PDWs failed on frequency/level offsets such as 1e6 or -3.5 and
+    truncated fractional offsets. They are now parsed as floats, like the other pulse types.
+  - Added build_exe.py, which packages the GUI into a standalone dist\xdw_pdw_gui.exe with PyInstaller so it
+    can be shared with users who do not have Python installed. See "Building a standalone .exe" above.
+  - Build requirements: bitstring must be below version 5 (version 5.x removed BitArray(<int>), which
+    rsxdwstreaming 2.0.0 still uses), and numpy must stay at 1.26.3 (rskfd 0.5.2 imports numpy.NaN, which
+    numpy 2.x removed). Both are pinned in the install command above.
+
 Version 3.1: Release Date: 9/24/26
   - Added an 'SMW Playback' tab that transfers the generated .ps_def, .ps_adr and .wv files to the SMW200A
     over LAN (SCPI on port 5025, default folder /var/user) and plays them with the Extended Sequencer in
