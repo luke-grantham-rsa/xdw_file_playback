@@ -55,6 +55,8 @@ Version 3.2: Release Date: 10/13/26
     bandwidth of the SMW path. Files generated with earlier versions used zero offsets for ARB PDWs.
   - The Output base name now updates to match the PDW list each time a new .csv is selected. Previously
     it was only filled in the first time, so later lists kept the name of the first one.
+  - SMW Playback now routes Baseband A Marker 1 to the T/M/C 1 local connector (Local Connectors A > Routing)
+    when playback starts. Previously T/M/C 1 stayed on its default, Symbol Clock A. Only T/M/C 1 is changed.
   - Fixed bug where Tchirp and Barker PDWs failed on frequency/level offsets such as 1e6 or -3.5 and
     truncated fractional offsets. They are now parsed as floats, like the other pulse types.
   - Added build_exe.py, which packages the GUI into a standalone dist\xdw_pdw_gui.exe with PyInstaller so it
