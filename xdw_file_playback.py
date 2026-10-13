@@ -213,6 +213,9 @@ def build_xdw_files(pdw_list: str, output_basename: str, comment: str = '', arb_
                                                payload=xdw_payload.XdwPayloadSegmentArb(segment_idx=0),
                                                extension3=xdw_extension.XdwExtensionBurst(pri=float(row[index_containing_substring(header, 'Burst PRI')]),
                                                                                           add_pulses=int(row[index_containing_substring(header, 'Number of Pulses')]) - 1),
+                                               freq_offset=float(row[index_containing_substring(header,'Frequency Offset')]),
+                                               level_offset=float(row[index_containing_substring(header,'Level Offset')]),
+                                               phase_offset=float(row[index_containing_substring(header,'Phase Offset')]),
                                                m1=float(row[index_containing_substring(header, 'Marker 1')]),
                                                m2=float(row[index_containing_substring(header, 'Marker 2')]),
                                                m3=float(row[index_containing_substring(header, 'Marker 3')]))
