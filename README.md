@@ -29,7 +29,8 @@ not have Python installed. Run these commands from the repository folder in Powe
      Python without it:
        uv venv .venv --python 3.12 --seed
   2. Install the dependencies. The rsxdwstreaming wheel is included in this repository:
-       pip install .\rsxdwstreaming-2.0.0-py2.py3-none-any.whl rskfd==0.5.2 numpy==1.26.3 PyQt6 pyinstaller
+       pip install .\rsxdwstreaming-2.0.0-py2.py3-none-any.whl "bitstring<5" rskfd==0.5.2 numpy==1.26.3 PyQt6 pyinstaller
+     (bitstring 5.x removed BitArray(<int>), which rsxdwstreaming 2.0.0 still uses, so keep it below 5.)
   3. Build the executable:
        python build_exe.py
      The build takes a few minutes and writes dist\xdw_pdw_gui.exe. The build\ and dist\ folders are not
