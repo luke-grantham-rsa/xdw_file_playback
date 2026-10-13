@@ -268,8 +268,8 @@ class PdwCsvPreviewWindow(QMainWindow):
         else:
             self.l_arb_required.setText("No ARB PDWs in this file.")
 
-        if not self.le_output.text():
-            self.le_output.setText(os.path.splitext(os.path.basename(path))[0])
+        # Always follow the selected list, so each new CSV gets its own default output name
+        self.le_output.setText(os.path.splitext(os.path.basename(path))[0])
 
         self.b_generate.setEnabled(True)
         self.populate_table(header, rows)
