@@ -9,6 +9,7 @@ SCPI_PORT = 5025
 DEFAULT_REMOTE_DIR = '/var/user'
 UPLOAD_CHUNK_BYTES = 1024 * 1024
 NUM_MARKERS = 3
+MARKER_CONNECTOR = 1  # local T/M/C connector that outputs Baseband Marker 1
 ADVANCED_MARKERS_PER_SEQUENCER = 2
 MAX_SEQUENCERS_PER_STREAM = 3
 SYSTEM_CONFIG_TIMEOUT = 120.0
@@ -116,6 +117,7 @@ class SmwInstrument:
         for ch in range(1, NUM_MARKERS + 1):
             self.write(f'{bb}:TRIG:OUTP{ch}:MODE PDW')
         self.check_errors('Configuring trigger/markers')
+        self.route_marker_to_connector(baseband, log=log)
         if rf_on:
             log(f'RF {baseband}: ON')
             self.write(f'OUTP{baseband}:STAT ON')
@@ -123,6 +125,17 @@ class SmwInstrument:
         self.write(f'{bb}:STAT ON')
         self.wait()
         self.check_errors('Starting playback')
+
+    def route_marker_to_connector(self, baseband: int = 1, marker: int = 1, connector: int = MARKER_CONNECTOR, log=print):
+        """Outputs the baseband marker on a local T/M/C connector (Local Connectors > Routing).
+
+        The connector otherwise keeps its default signal (e.g. Symbol Clock A on T/M/C 1 after a preset).
+        OUTPut<hw>:TM<ch> is the local connector; OUTPut<hw>:USER<ch> is a different (global) connector map.
+        """
+        signal = f'MARK{chr(64 + baseband)}{marker}'  # e.g. MARKA1 = Baseband A Marker 1
+        log(f'T/M/C {connector}: Baseband {chr(64 + baseband)} Marker {marker}')
+        self.write(f'OUTP{baseband}:TM{connector}:SIGN {signal}')
+        self.check_errors('Routing marker to connector')
 
     def execute_trigger(self, baseband: int = 1):
         self.write(f'SOUR{baseband}:BB:ESEQ:TRIG:EXEC')
