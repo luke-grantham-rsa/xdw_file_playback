@@ -1,4 +1,6 @@
-For more detailed information, please open the Python Script SMW200A Instructions.docx
+Getting started: see the user guide, "Python Script SMW200A Instructions.docx" (in this repository), for
+startup instructions (installing Python and the dependencies and launching the GUI) and for how to use the
+GUI to generate xDW files and play them on the SMW200A.
 
 For any issues with this solution, please contact
 
@@ -14,6 +16,19 @@ Descriptor Words are simple, readable structures that describe a pulse. R&S Puls
 Users provide a .csv with Descriptor Words with information describing a pulse. The script processes the .csv and generates the necessary files to output the pulses on the Rohde & Schwarz SMW200A Vector Signal Generator.
 The GUI can then transfer the files to the SMW200A over LAN and play them, on a single baseband or on multiple
 sequencers in Extended Sequencer Advanced mode.
+See "Python Script SMW200A Instructions.docx" for startup and usage instructions.
+
+
+
+Setting up the Python environment:
+
+setup_windows.ps1 (Windows) and setup_linux.sh (Linux) create a virtual environment in .venv and install the
+packages in requirements.txt into it. Both need Python 3.12 or later (3.12 recommended). Run them from the
+repository folder:
+  Windows (PowerShell):  powershell -ExecutionPolicy Bypass -File .\setup_windows.ps1
+  Linux:                 ./setup_linux.sh
+Add -Recreate (Windows) or --recreate (Linux) to delete .venv and start over. If Python 3.12 or later is not
+installed, the scripts explain how to get it. See the user guide for how to start and use the GUI.
 
 
 
@@ -22,17 +37,11 @@ Building a standalone .exe:
 The GUI can be packaged into a single xdw_pdw_gui.exe with PyInstaller, so it can be shared with users who do
 not have Python installed. Run these commands from the repository folder in PowerShell.
 
-  1. Create a Python 3.12 virtual environment and activate it:
-       python -m venv .venv
-       .venv\Scripts\activate
-     If the standard Python installer is blocked on your PC, uv (https://docs.astral.sh/uv/) can install
-     Python without it:
-       uv venv .venv --python 3.12 --seed
-  2. Install the dependencies. The rsxdwstreaming wheel is included in this repository:
-       pip install .\rsxdwstreaming-2.0.0-py2.py3-none-any.whl "bitstring<5" rskfd==0.5.2 numpy==1.26.3 PyQt6 pyinstaller
-     (bitstring 5.x removed BitArray(<int>), which rsxdwstreaming 2.0.0 still uses, so keep it below 5.)
+  1. Set up the Python environment with setup_windows.ps1 (see "Setting up the Python environment" above).
+  2. Install PyInstaller into the environment:
+       .venv\Scripts\python.exe -m pip install pyinstaller
   3. Build the executable:
-       python build_exe.py
+       .venv\Scripts\python.exe build_exe.py
      The build takes a few minutes and writes dist\xdw_pdw_gui.exe. The build\ and dist\ folders are not
      committed to git.
 
@@ -46,6 +55,14 @@ not have Python installed. Run these commands from the repository folder in Powe
 
 
 Release Updates:
+
+Unreleased:
+  - Added setup_windows.ps1 and setup_linux.sh, which create the .venv virtual environment and install the
+    packages listed in the new requirements.txt. See "Setting up the Python environment" above.
+  - Updated rskfd from 0.5.2 to 0.7.2 and numpy from 1.26.3 to 2.5.3. rskfd 0.5.2 imported numpy.NaN when
+    reading ARB waveforms, which numpy 2.x removed; rskfd 0.5.3 and later fixed this. numpy 1.26.3 has no
+    packages for Python 3.13 and later, so the old versions could not be installed there. Python 3.12 or later
+    is now required. rskfd 0.7.2 also no longer installs scipy.
 
 Version 3.2: Release Date: 10/13/26
   - ARB PDWs now apply the 'Frequency Offset', 'Level Offset' and 'Phase Offset' columns. Previously these

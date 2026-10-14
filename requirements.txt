@@ -1,0 +1,14 @@
+# Python packages for xdw_file_playback.py / xdw_pdw_gui.py. Requires Python 3.12 or later
+# (numpy 2.5.3 has no packages for earlier versions).
+# Installed by setup_linux.sh and setup_windows.ps1. Run pip from the repository folder,
+# because the rsxdwstreaming wheel path below is relative to it.
+./rsxdwstreaming-2.0.0-py2.py3-none-any.whl
+
+# bitstring 5.x removed BitArray(<int>), which rsxdwstreaming 2.0.0 still uses.
+bitstring<5
+
+# rskfd 0.5.2 and earlier import numpy.NaN in ReadWv, which numpy 2.x removed; 0.5.3 and later work with numpy 2.x.
+numpy==2.5.3
+rskfd==0.7.2
+
+PyQt6
