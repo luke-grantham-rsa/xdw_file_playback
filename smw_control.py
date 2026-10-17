@@ -12,7 +12,7 @@ NUM_MARKERS = 3
 MARKER_CONNECTOR = 1  # local T/M/C connector that outputs Baseband Marker 1
 ADVANCED_MARKERS_PER_SEQUENCER = 2
 MAX_SEQUENCERS_PER_STREAM = 3
-SYSTEM_CONFIG_TIMEOUT = 120.0
+OPERATION_TIMEOUT = 180.0  # max time to wait for a long operation (start, load, system apply) to finish
 
 TRIGGER_MODES = {
     'Auto': 'AUTO',
@@ -66,9 +66,17 @@ class SmwInstrument:
             response += self.reader.readline()
         return response.decode().strip()
 
-    def wait(self):
-        """Blocks until all previous commands have completed."""
-        self.query('*OPC?')
+    def wait(self, timeout: float = OPERATION_TIMEOUT):
+        """Blocks until all previous commands have completed.
+
+        Starting sequencers, loading files and applying the system configuration can take far longer than
+        the normal socket timeout (about 26 s on the SMW200A), so only this wait uses the long timeout.
+        """
+        self.sock.settimeout(timeout)
+        try:
+            self.query('*OPC?')
+        finally:
+            self.sock.settimeout(self.timeout)
 
     def check_errors(self, context: str = ''):
         """Raises ScpiError if the instrument error queue is not empty."""
@@ -166,11 +174,7 @@ class SmwInstrument:
         """
         self.write('SCON:MODE ESEQ')
         self.write('SCON:APPL')
-        self.sock.settimeout(SYSTEM_CONFIG_TIMEOUT)
-        try:
-            self.wait()
-        finally:
-            self.sock.settimeout(self.timeout)
+        self.wait()
         self.check_errors('Switching to Extended Sequencer Advanced mode')
 
     def sequencer_count(self):
