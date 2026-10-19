@@ -12,6 +12,8 @@ NUM_MARKERS = 3
 MARKER_CONNECTOR = 1  # local T/M/C connector that outputs Baseband Marker 1
 ADVANCED_MARKERS_PER_SEQUENCER = 2
 MAX_SEQUENCERS_PER_STREAM = 3
+CONNECT_TIMEOUT = 10.0     # opening the socket
+READ_TIMEOUT = 60.0        # any single reply: the instrument is slow to answer while it switches system mode or plays
 OPERATION_TIMEOUT = 180.0  # max time to wait for a long operation (start, load, system apply) to finish
 
 TRIGGER_MODES = {
@@ -34,15 +36,17 @@ class ScpiError(Exception):
 
 
 class SmwInstrument:
-    def __init__(self, host: str, port: int = SCPI_PORT, timeout: float = 10.0):
+    def __init__(self, host: str, port: int = SCPI_PORT, timeout: float = READ_TIMEOUT):
         self.host = host
         self.port = port
-        self.timeout = timeout
+        self.timeout = timeout  # how long a reply may take once connected
         self.sock = None
         self.reader = None
 
     def connect(self):
-        self.sock = socket.create_connection((self.host, self.port), timeout=self.timeout)
+        # A wrong address should still fail fast, so connecting uses its own short timeout.
+        self.sock = socket.create_connection((self.host, self.port), timeout=CONNECT_TIMEOUT)
+        self.sock.settimeout(self.timeout)
         self.reader = self.sock.makefile('rb')
         self.write('*CLS')
         return self.query('*IDN?')

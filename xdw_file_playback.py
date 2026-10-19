@@ -199,7 +199,6 @@ def build_xdw_files(pdw_list: str, output_basename: str, comment: str = '', arb_
         header = next(csvreader)
         for row in csvreader:
             if row[index_containing_substring(header, 'Type')] == 'pdw':
-                log(f"Processing {row[index_containing_substring(header, 'Type')]} with {row[index_containing_substring(header, 'Mod')]} waveform with {row[index_containing_substring(header, 'Number of Pulses')]} pulse(s).")
                 if int(row[index_containing_substring(header, 'Number of Pulses')]) == 0:
                     continue
                 if row[index_containing_substring(header, 'Mod')] == 'arb':
